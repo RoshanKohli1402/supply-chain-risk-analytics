@@ -158,7 +158,7 @@ jupyter notebook notebooks/supply_chain_analysis.ipynb
 | Name | Role | Scope |
 |------|------|-------|
 | Roshan Kohli | Data & Analytics | EDA, ML Pipeline, Risk Scoring, Demand Forecasting, Power BI |
-| [Partner Name] | Backend Engineering | FastAPI/Spring Boot, PostgreSQL Schema, REST APIs, Docker |
+| Vanshika Pandey | Backend Engineering | FastAPI/Spring Boot, PostgreSQL Schema, REST APIs, Docker |
 
 ---
 
