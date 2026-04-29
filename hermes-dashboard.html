@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HERMES — Supply Chain Risk Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#07090f;
+  --surface:#0d1117;
+  --card:#111827;
+  --card2:#161d2e;
+  --border:#1e2a3a;
+  --blue:#4f8ef7;
+  --teal:#14b8a6;
+  --amber:#f5a623;
+  --red:#ef4444;
+  --green:#22c55e;
+  --purple:#a78bfa;
+  --pink:#f472b6;
+  --text:#eef2ff;
+  --muted:#8892a4;
+  --font:'Outfit',sans-serif;
+  --mono:'Space Mono',monospace;
+  --sidebar:220px;
+}
+html,body{height:100%;background:var(--navy);color:var(--text);font-family:var(--font)}
+body{display:flex;flex-direction:row;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh}
+.sidebar .logo{display:flex;align-items:center;gap:10px;padding:20px 16px;border-bottom:1px solid var(--border)}
+.logo-icon{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--blue) 0%,var(--teal) 100%);display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-name{font-size:14px;font-weight:800;letter-spacing:3px;color:var(--text)}
+.logo-tagline{font-size:8px;color:var(--muted);letter-spacing:1px;font-family:var(--mono);margin-top:2px}
+.nav-tabs{display:flex;flex-direction:column;gap:2px;padding:14px 8px;flex:1}
+.nav-tab{width:100%;padding:11px 14px;background:none;border:none;border-left:3px solid transparent;color:var(--muted);font-family:var(--font);font-size:13px;letter-spacing:0.3px;cursor:pointer;transition:all 0.2s;font-weight:500;text-align:left;border-radius:0 8px 8px 0;display:flex;align-items:center;gap:10px}
+.nav-tab:hover{color:var(--text);background:rgba(255,255,255,0.04)}
+.nav-tab.active{color:var(--blue);border-left-color:var(--blue);background:rgba(79,142,247,0.08)}
+.tab-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sidebar-footer{padding:14px 16px;border-top:1px solid var(--border)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block;margin-right:6px;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.live-label{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:1px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:46px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;flex-shrink:0;gap:12px}
+.topbar-title{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--muted);font-family:var(--mono)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar-badge{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:3px 10px;border-radius:20px}
+/* NAV legacy placeholder */
+
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:24px;scroll-behavior:smooth}
+.page{display:none;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:32px;margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.hero-grid{display:grid;grid-template-columns:1fr 240px;gap:24px;align-items:center}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--teal);margin-bottom:10px}
+.hero h1{font-size:32px;font-weight:800;line-height:1.2;margin-bottom:10px}
+.hero h1 span{color:var(--blue)}
+.hero p{font-size:14px;color:var(--muted);line-height:1.7;max-width:500px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:20px;padding:5px 14px;
+  font-size:11px;letter-spacing:1px;color:var(--muted);font-family:var(--mono);
+}
+.hero-stat{text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px}
+.hero-stat-val{font-size:42px;font-weight:800;color:var(--red)}
+.hero-stat-label{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;margin-top:4px}
+.hero-stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+/* SECTION TITLE */
+.sec-title{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+
+/* GRIDS */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:20px}
+
+/* METRIC CARDS */
+.mc{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:18px;position:relative;overflow:hidden;
+}
+.mc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.mc.blue::after{background:var(--blue)}
+.mc.red::after{background:var(--red)}
+.mc.amber::after{background:var(--amber)}
+.mc.green::after{background:var(--green)}
+.mc.teal::after{background:var(--teal)}
+.mc.purple::after{background:var(--purple)}
+.mc-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px}
+.mc-val{font-size:34px;font-weight:800;line-height:1}
+.mc.blue .mc-val{color:var(--blue)}
+.mc.red .mc-val{color:var(--red)}
+.mc.amber .mc-val{color:var(--amber)}
+.mc.green .mc-val{color:var(--green)}
+.mc.teal .mc-val{color:var(--teal)}
+.mc.purple .mc-val{color:var(--purple)}
+.mc-sub{font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)}
+
+/* CHART CARDS */
+.cc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+.cc-title{font-size:15px;font-weight:700;margin-bottom:3px}
+.cc-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px;letter-spacing:1px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11px;font-family:var(--mono);font-weight:500}
+.badge.red{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
+.badge.amber{background:rgba(245,166,35,0.15);color:#fbbf24;border:1px solid rgba(245,166,35,0.2)}
+.badge.green{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
+.badge.blue{background:rgba(79,142,247,0.15);color:#7eb3ff;border:1px solid rgba(79,142,247,0.2)}
+
+/* ALERT FEED */
+.alert-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.alert-item:last-child{border-bottom:none}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.alert-dot.red{background:var(--red)}
+.alert-dot.amber{background:var(--amber)}
+.alert-body{flex:1}
+.alert-title{font-size:13px;font-weight:700}
+.alert-desc{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+.alert-time{font-size:11px;color:var(--muted);font-family:var(--mono);flex-shrink:0}
+
+/* RISK TABLE */
+.rt{width:100%;border-collapse:collapse}
+.rt th{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--muted);padding:8px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.rt td{padding:12px 14px;font-size:13px;border-bottom:1px solid rgba(30,42,58,0.5)}
+.rt tr:hover td{background:var(--card2)}
+.risk-bar-wrap{width:100%;height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:4px}
+.risk-bar{height:100%;border-radius:3px}
+
+/* INSIGHT TILES */
+.insight-tile{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.it-icon{font-size:22px;margin-bottom:8px}
+.it-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.it-text{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* SHAP BARS */
+.shap-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.shap-lbl{font-family:var(--mono);font-size:12px;color:var(--muted);width:180px;flex-shrink:0;text-align:right}
+.shap-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.shap-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.shap-pct{font-family:var(--mono);font-size:12px;width:36px;text-align:right;flex-shrink:0}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div>
+      <div class="logo-name">HERMES</div>
+      <div class="logo-tagline">SUPPLY CHAIN INTEL</div>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="show('overview',this)"><span class="tab-icon">📊</span>Overview</button>
+    <button class="nav-tab" onclick="show('supplier',this)"><span class="tab-icon">⚠️</span>Disruption Index</button>
+    <button class="nav-tab" onclick="show('delivery',this)"><span class="tab-icon">🚚</span>Delivery Analytics</button>
+    <button class="nav-tab" onclick="show('forecast',this)"><span class="tab-icon">📈</span>Demand Forecast</button>
+    <button class="nav-tab" onclick="show('ml',this)"><span class="tab-icon">🤖</span>ML Insights</button>
+  </div>
+  <div class="sidebar-footer">
+    <div class="live-dot"></div><span class="live-label">SYSTEM LIVE</span>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:0.5px">39,682 RECORDS · DataCo</div>
+  </div>
+</div>
+
+<div class="main">
+<div class="topbar">
+  <span class="topbar-title" id="topbar-label">EXECUTIVE OVERVIEW</span>
+  <div class="topbar-right">
+    <span class="topbar-badge">XGBoost · AUC 0.77</span>
+    <span class="topbar-badge">Prophet · 90d</span>
+    <span class="topbar-badge">SHAP Explainability</span>
+  </div>
+</div>
+<div class="content">
+
+<!-- ======= PAGE: OVERVIEW ======= -->
+<div class="page active" id="page-overview">
+
+  <div class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">GLOBAL SUPPLY NETWORK · 2015–2018</div>
+        <h1>Network <span>Disruption</span><br/>Intelligence Engine</h1>
+        <p>Predictive analytics across 39,682 supply chain transactions. XGBoost risk model with 77% AUC identifies late delivery signals before shipment. Supplier risk scored across 11 departments using a composite Disruption Risk Index.</p>
+        <div class="hero-tags">
+          <span class="tag">XGBoost · AUC 0.77</span>
+          <span class="tag">SHAP Explainability</span>
+          <span class="tag">Prophet 90-Day Forecast</span>
+          <span class="tag">Disruption Risk Index</span>
+          <span class="tag">DataCo Dataset</span>
+        </div>
+      </div>
+      <div>
+        <div class="hero-stat">
+          <div class="hero-stat-val">57.7%</div>
+          <div class="hero-stat-label">LATE DELIVERY RATE</div>
+          <div class="hero-stat-sub">22,915 of 39,682 orders arrived late</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">KEY PERFORMANCE INDICATORS</div>
+  <div class="g4">
+    <div class="mc blue">
+      <div class="mc-label">TOTAL ORDERS</div>
+      <div class="mc-val">39,682</div>
+      <div class="mc-sub">DataCo 2015–2018</div>
+    </div>
+    <div class="mc red">
+      <div class="mc-label">LATE DELIVERY RATE</div>
+      <div class="mc-val">57.7%</div>
+      <div class="mc-sub">22,915 late orders</div>
+    </div>
+    <div class="mc amber">
+      <div class="mc-label">AVG SHIPPING DELAY</div>
+      <div class="mc-val">0.6d</div>
+      <div class="mc-sub">Max 4 days observed</div>
+    </div>
+    <div class="mc amber">
+      <div class="mc-label">LOSS ORDER RATE</div>
+      <div class="mc-val">18.6%</div>
+      <div class="mc-sub">7,383 unprofitable</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-title">Delivery Status Distribution</div>
+      <div class="cc-sub">BREAKDOWN OF ALL 39,682 ORDERS</div>
+      <div style="position:relative;height:200px">
+        <canvas id="c-donut" role="img" aria-label="Delivery status: Late 57.7%, Advance 22.1%, On Time 17.6%, Canceled 2.6%">Late 57.7%, Advance 22.1%, On Time 17.6%, Canceled 2.6%</canvas>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Late 57.7%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span>Advance 22.1%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#4f8ef7"></span>On Time 17.6%</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#8892a4"></span>Canceled 2.6%</span>
+      </div>
+    </div>
+
+    <div class="cc">
+      <div class="cc-title">High Risk Alerts</div>
+      <div class="cc-sub">RECENT DISRUPTIONS REQUIRING ATTENTION</div>
+      <div class="alert-item">
+        <div class="alert-dot red"></div>
+        <div class="alert-body">
+          <div class="alert-title">Order #55985 — Pet Shop</div>
+          <div class="alert-desc">Second Class · Late delivery · DRI: 82.7</div>
+        </div>
+        <div class="alert-time">2017-03-28</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot red"></div>
+        <div class="alert-body">
+          <div class="alert-title">Order #3225 — Book Shop</div>
+          <div class="alert-desc">Second Class · Late delivery · DRI: 75.6</div>
+        </div>
+        <div class="alert-time">2015-02-17</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot amber"></div>
+        <div class="alert-body">
+          <div class="alert-title">Order #55810 — Technology</div>
+          <div class="alert-desc">First Class · Shipping canceled · DRI: 70.1</div>
+        </div>
+        <div class="alert-time">2017-03-25</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot amber"></div>
+        <div class="alert-body">
+          <div class="alert-title">Order #12044 — Fan Shop</div>
+          <div class="alert-desc">Second Class · Late delivery · DRI: 59.7</div>
+        </div>
+        <div class="alert-time">2016-11-09</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot amber"></div>
+        <div class="alert-body">
+          <div class="alert-title">Order #38812 — Apparel</div>
+          <div class="alert-desc">First Class · Late delivery · DRI: 34.7</div>
+        </div>
+        <div class="alert-time">2017-01-14</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">CRITICAL INSIGHT SUMMARY</div>
+  <div class="g3">
+    <div class="insight-tile">
+      <div class="it-icon">🚨</div>
+      <div class="it-title">Second Class Shipping Crisis</div>
+      <div class="it-text">Second Class shipping averages 2.01 days late — 4x worse than Standard Class. Accounts for the dominant share of all delay variance in the network.</div>
+    </div>
+    <div class="insight-tile">
+      <div class="it-icon">📦</div>
+      <div class="it-title">Pet Shop & Book Shop — Critical</div>
+      <div class="it-text">Disruption Risk Index scores of 82.7 and 75.6 respectively. Both departments show 64.7% late delivery rate with avg delay exceeding 0.8 days.</div>
+    </div>
+    <div class="insight-tile">
+      <div class="it-icon">📉</div>
+      <div class="it-title">18.6% Orders Lose Money</div>
+      <div class="it-text">7,383 orders generated negative profit. Min profit observed: −$3,366. Concentrated in high-discount orders with second class shipping.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= PAGE: SUPPLIER RISK ======= -->
+<div class="page" id="page-supplier">
+  <div class="sec-title">DISRUPTION RISK INDEX — DEPARTMENT SCORECARD</div>
+
+  <div class="g3" style="margin-bottom:20px">
+    <div class="mc red">
+      <div class="mc-label">HIGH RISK DEPARTMENTS</div>
+      <div class="mc-val">3</div>
+      <div class="mc-sub">Pet Shop, Book Shop, Technology</div>
+    </div>
+    <div class="mc amber">
+      <div class="mc-label">MEDIUM RISK DEPARTMENTS</div>
+      <div class="mc-val">4</div>
+      <div class="mc-sub">Fan Shop, H&amp;B, Discs, Apparel</div>
+    </div>
+    <div class="mc green">
+      <div class="mc-label">LOW RISK DEPARTMENTS</div>
+      <div class="mc-val">4</div>
+      <div class="mc-sub">Golf, Footwear, Fitness, Outdoors</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-title">Disruption Risk Index by Department</div>
+      <div class="cc-sub">COMPOSITE SCORE 0–100 (HIGHER = MORE RISK)</div>
+      <div style="position:relative;height:320px">
+        <canvas id="c-dri" role="img" aria-label="DRI scores by department">Pet Shop 82.7, Book Shop 75.6, Technology 70.1, Fan Shop 59.7, Health Beauty 40.8, Discs Shop 39.7, Apparel 34.7, Golf 18.0, Footwear 15.6, Fitness 13.9, Outdoors 13.7</canvas>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="cc-title">Late Rate vs Avg Delay</div>
+      <div class="cc-sub">BUBBLE SIZE = ORDER VOLUME · COLOR = RISK TIER</div>
+      <div style="position:relative;height:320px">
+        <canvas id="c-scatter" role="img" aria-label="Scatter plot of late rate vs average delay by department">Departments plotted by late delivery rate and average delay.</canvas>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>High Risk</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#f5a623"></span>Medium Risk</span>
+        <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span>Low Risk</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">Detailed Risk Scorecard</div>
+    <div class="cc-sub">ALL DEPARTMENTS · WEIGHTED COMPOSITE: LATE RATE 40% · AVG DELAY 30% · LOSS RATE 20% · DISCOUNT PRESSURE 10%</div>
+    <table class="rt">
+      <thead>
+        <tr>
+          <th>DEPARTMENT</th>
+          <th>ORDERS</th>
+          <th>LATE RATE</th>
+          <th>AVG DELAY</th>
+          <th>RISK TIER</th>
+          <th>DRI SCORE</th>
+        </tr>
+      </thead>
+      <tbody id="risk-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ======= PAGE: DELIVERY ======= -->
+<div class="page" id="page-delivery">
+  <div class="sec-title">DELIVERY ANALYTICS — NETWORK PERFORMANCE</div>
+
+  <div class="g4" style="margin-bottom:20px">
+    <div class="mc red">
+      <div class="mc-label">LATE DELIVERIES</div>
+      <div class="mc-val">22,915</div>
+      <div class="mc-sub">57.7% of all orders</div>
+    </div>
+    <div class="mc teal">
+      <div class="mc-label">ADVANCE SHIPPING</div>
+      <div class="mc-val">8,753</div>
+      <div class="mc-sub">22.1% ahead of schedule</div>
+    </div>
+    <div class="mc green">
+      <div class="mc-label">ON TIME</div>
+      <div class="mc-val">6,973</div>
+      <div class="mc-sub">17.6% on schedule</div>
+    </div>
+    <div class="mc amber">
+      <div class="mc-label">CANCELED</div>
+      <div class="mc-val">1,041</div>
+      <div class="mc-sub">2.6% — revenue lost</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-title">Avg Delay by Shipping Mode</div>
+      <div class="cc-sub">SECOND CLASS IS THE PRIMARY RISK DRIVER</div>
+      <div style="position:relative;height:220px">
+        <canvas id="c-mode" role="img" aria-label="Average delay by shipping mode: Second Class 2.01d, First Class 1.0d, Same Day 0.5d, Standard Class 0.0d">Second Class 2.01 days, First Class 1.0 days, Same Day 0.5 days, Standard Class 0 days.</canvas>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="cc-title">Top Delayed Regions</div>
+      <div class="cc-sub">AVG DELAY DAYS BY ORDER REGION</div>
+      <div style="position:relative;height:220px">
+        <canvas id="c-region" role="img" aria-label="Top delayed regions: Central Asia 0.895, South of USA 0.729, North Africa 0.687, South Asia 0.684, East Africa 0.672">Top 8 most delayed regions shown.</canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">Delay by Department</div>
+    <div class="cc-sub">BOOK SHOP AND PET SHOP ARE CONSISTENTLY WORST — HIGH DRI CONFIRMED</div>
+    <div style="position:relative;height:200px">
+      <canvas id="c-dept" role="img" aria-label="Average delay by department showing Book Shop and Pet Shop as highest">Department delay analysis.</canvas>
+    </div>
+  </div>
+
+  <div class="sec-title">KEY DELIVERY INSIGHTS</div>
+  <div class="g3">
+    <div class="insight-tile">
+      <div class="it-icon">🚂</div>
+      <div class="it-title">Second Class = 2x Late Rate</div>
+      <div class="it-text">Second Class shipping produces 2.01 days avg delay — 4x worse than Standard Class (0.0d). Switching high-value orders to Standard Class could halve network delay.</div>
+    </div>
+    <div class="insight-tile">
+      <div class="it-icon">🌍</div>
+      <div class="it-title">Central Asia Highest Risk Region</div>
+      <div class="it-text">Central Asia shows 0.895 avg delay — 57% above the global network average of 0.57. Followed by South of USA (0.73d) and North Africa (0.69d).</div>
+    </div>
+    <div class="insight-tile">
+      <div class="it-icon">🛍️</div>
+      <div class="it-title">Book Shop Worst Department</div>
+      <div class="it-text">Book Shop averages 0.83 days delay — higher than any other department. Low order volume (102) but 64.7% late rate flags a structural supplier issue.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= PAGE: FORECAST ======= -->
+<div class="page" id="page-forecast">
+  <div class="sec-title">DEMAND FORECASTING — PROPHET MODEL · 90-DAY OUTLOOK</div>
+
+  <div class="g4" style="margin-bottom:20px">
+    <div class="mc blue">
+      <div class="mc-label">AVG DAILY ORDERS</div>
+      <div class="mc-val">~20</div>
+      <div class="mc-sub">Stable 2015–2018</div>
+    </div>
+    <div class="mc green">
+      <div class="mc-label">PEAK DAY</div>
+      <div class="mc-val">Thu</div>
+      <div class="mc-sub">+22% above weekly avg</div>
+    </div>
+    <div class="mc amber">
+      <div class="mc-label">SEASONAL DIP</div>
+      <div class="mc-val">Jan–Feb</div>
+      <div class="mc-sub">Annual winter slowdown</div>
+    </div>
+    <div class="mc teal">
+      <div class="mc-label">90-DAY TREND</div>
+      <div class="mc-val">↑ 15%</div>
+      <div class="mc-sub">Upward volume expected</div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">90-Day Demand Forecast</div>
+    <div class="cc-sub">DAILY ORDER VOLUME WITH CONFIDENCE BAND (PROPHET MODEL)</div>
+    <div style="position:relative;height:260px">
+      <canvas id="c-forecast" role="img" aria-label="90-day demand forecast showing stable ~20 orders per day with slight upward trend">Demand forecast with confidence intervals.</canvas>
+    </div>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-dot" style="background:#4f8ef7"></span>Forecast</span>
+      <span class="legend-item"><span class="legend-dot" style="background:rgba(79,142,247,0.2)"></span>Confidence Band</span>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-title">Weekly Seasonality Pattern</div>
+      <div class="cc-sub">THU/FRI = PEAK · TUE = TROUGH</div>
+      <div style="position:relative;height:200px">
+        <canvas id="c-weekly" role="img" aria-label="Weekly seasonality showing Thursday and Friday as peak days">Weekly order patterns.</canvas>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="cc-title">Forecasting Insights</div>
+      <div class="cc-sub">KEY PATTERNS FROM PROPHET DECOMPOSITION</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
+        <div class="insight-tile">
+          <div class="it-title">Weekend Restocking Effect</div>
+          <div class="it-text">Orders spike 22% on Thursdays and Fridays as retailers place restocking orders ahead of weekend demand peaks.</div>
+        </div>
+        <div class="insight-tile">
+          <div class="it-title">Jan–Feb Annual Dip</div>
+          <div class="it-text">Yearly seasonality shows a consistent dip in January–February each year — post-holiday demand contraction across all departments.</div>
+        </div>
+        <div class="insight-tile">
+          <div class="it-title">Sep–Oct Peak Season</div>
+          <div class="it-text">September and October show the strongest yearly demand surge — pre-holiday inventory stocking cycle drives order spikes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= PAGE: ML INSIGHTS ======= -->
+<div class="page" id="page-ml">
+  <div class="sec-title">ML INSIGHTS — XGBOOST LATE DELIVERY PREDICTION MODEL</div>
+
+  <div class="g4" style="margin-bottom:20px">
+    <div class="mc blue">
+      <div class="mc-label">AUC-ROC SCORE</div>
+      <div class="mc-val">0.77</div>
+      <div class="mc-sub">Prediction capability</div>
+    </div>
+    <div class="mc green">
+      <div class="mc-label">ACCURACY</div>
+      <div class="mc-val">71%</div>
+      <div class="mc-sub">True classification rate</div>
+    </div>
+    <div class="mc teal">
+      <div class="mc-label">PRECISION (LATE)</div>
+      <div class="mc-val">80%</div>
+      <div class="mc-sub">Reliability on positive class</div>
+    </div>
+    <div class="mc purple">
+      <div class="mc-label">F1 SCORE</div>
+      <div class="mc-val">0.74</div>
+      <div class="mc-sub">Harmonic mean</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-title">SHAP Feature Importance</div>
+      <div class="cc-sub">MEAN |SHAP| VALUE — IMPACT ON MODEL OUTPUT</div>
+      <div style="margin-top:8px">
+        <div class="shap-row">
+          <div class="shap-lbl">shipping_risk_score</div>
+          <div class="shap-wrap"><div class="shap-fill" style="width:95%;background:var(--blue)"></div></div>
+          <div class="shap-pct" style="color:var(--blue)">45%</div>
+        </div>
+        <div class="shap-row">
+          <div class="shap-lbl">days_shipping_scheduled</div>
+          <div class="shap-wrap"><div class="shap-fill" style="width:68%;background:var(--teal)"></div></div>
+          <div class="shap-pct" style="color:var(--teal)">32%</div>
+        </div>
+        <div class="shap-row">
+          <div class="shap-lbl">customer_segment</div>
+          <div class="shap-wrap"><div class="shap-fill" style="width:32%;background:var(--purple)"></div></div>
+          <div class="shap-pct" style="color:var(--purple)">15%</div>
+        </div>
+        <div class="shap-row">
+          <div class="shap-lbl">order_region</div>
+          <div class="shap-wrap"><div class="shap-fill" style="width:11%;background:var(--amber)"></div></div>
+          <div class="shap-pct" style="color:var(--amber)">5%</div>
+        </div>
+        <div class="shap-row">
+          <div class="shap-lbl">department_encoded</div>
+          <div class="shap-wrap"><div class="shap-fill" style="width:6%;background:var(--pink)"></div></div>
+          <div class="shap-pct" style="color:var(--pink)">3%</div>
+        </div>
+        <div class="shap-row">
+          <div class="shap-lbl">item_quantity</div>
+          <div class="shap-wrap"><div class="shap-fill" style="width:4%;background:var(--muted)"></div></div>
+          <div class="shap-pct" style="color:var(--muted)">2%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cc">
+      <div class="cc-title">Model Performance Breakdown</div>
+      <div class="cc-sub">CLASS-LEVEL METRICS FROM TEST SET (7,937 SAMPLES)</div>
+      <div style="position:relative;height:200px;margin-bottom:16px">
+        <canvas id="c-perf" role="img" aria-label="Model performance radar chart showing AUC, accuracy, precision, recall, F1">Model metrics radar.</canvas>
+      </div>
+      <div class="sec-title" style="margin-top:16px">MODEL NOTES</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="insight-tile">
+          <div class="it-title">Leakage Detected &amp; Fixed</div>
+          <div class="it-text">Initial AUC of 1.0 flagged as data leakage — <code style="font-family:var(--mono);font-size:10px">days_shipping_real</code> removed. Final AUC 0.77 is honest and production-valid.</div>
+        </div>
+        <div class="insight-tile">
+          <div class="it-title">Train/Test Split — Stratified</div>
+          <div class="it-text">80/20 stratified split. Train: 31,745 samples · Test: 7,937 samples. Late delivery rate preserved at 57.7% in both splits.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">Model Interpretation — What Drives Late Delivery?</div>
+    <div class="cc-sub">BUSINESS TRANSLATION OF SHAP FINDINGS</div>
+    <div class="g3">
+      <div class="insight-tile">
+        <div class="it-icon">🚢</div>
+        <div class="it-title">Shipping Mode = 45% of Prediction Power</div>
+        <div class="it-text">The single biggest predictor of late delivery is which shipping mode is chosen. Second Class = almost guaranteed delay. Standard Class = near-zero delay risk.</div>
+      </div>
+      <div class="insight-tile">
+        <div class="it-icon">📅</div>
+        <div class="it-title">Scheduled Window = 32% Influence</div>
+        <div class="it-text">Longer planned shipping windows correlate with higher late risk — suggesting systemic underestimation of fulfillment time in order processing.</div>
+      </div>
+      <div class="insight-tile">
+        <div class="it-icon">👤</div>
+        <div class="it-title">Customer Segment = 15% Influence</div>
+        <div class="it-text">Customer type (Consumer vs Corporate vs Home Office) drives 15% of delay prediction — suggesting differential treatment in fulfillment priority.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end content -->
+</div><!-- end main -->
+
+<script>
+const supplierData = [
+  {dept:'Pet Shop',orders:136,lateRate:64.7,avgDelay:0.82,score:82.7,tier:'High Risk',color:'#ef4444'},
+  {dept:'Book Shop',orders:102,lateRate:64.7,avgDelay:0.83,score:75.6,tier:'High Risk',color:'#ef4444'},
+  {dept:'Technology',orders:450,lateRate:64.7,avgDelay:0.76,score:70.1,tier:'High Risk',color:'#ef4444'},
+  {dept:'Fan Shop',orders:5271,lateRate:62.0,avgDelay:0.72,score:59.7,tier:'Medium Risk',color:'#f5a623'},
+  {dept:'Health & Beauty',orders:72,lateRate:58.3,avgDelay:0.47,score:40.8,tier:'Medium Risk',color:'#f5a623'},
+  {dept:'Discs Shop',orders:539,lateRate:60.3,avgDelay:0.63,score:39.7,tier:'Medium Risk',color:'#f5a623'},
+  {dept:'Apparel',orders:13859,lateRate:58.4,avgDelay:0.63,score:34.7,tier:'Medium Risk',color:'#f5a623'},
+  {dept:'Golf',orders:9887,lateRate:56.2,avgDelay:0.56,score:18.0,tier:'Low Risk',color:'#22c55e'},
+  {dept:'Footwear',orders:4394,lateRate:55.6,avgDelay:0.54,score:15.6,tier:'Low Risk',color:'#22c55e'},
+  {dept:'Fitness',orders:1443,lateRate:55.4,avgDelay:0.57,score:13.9,tier:'Low Risk',color:'#22c55e'},
+  {dept:'Outdoors',orders:3529,lateRate:55.1,avgDelay:0.54,score:13.7,tier:'Low Risk',color:'#22c55e'},
+];
+
+const pageTitles={overview:'EXECUTIVE OVERVIEW',supplier:'DISRUPTION RISK INDEX',delivery:'DELIVERY ANALYTICS',forecast:'DEMAND FORECAST',ml:'ML INSIGHTS'};
+function show(id, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+  document.getElementById('topbar-label').textContent=pageTitles[id];
+}
+
+function buildTable() {
+  const tbody = document.getElementById('risk-tbody');
+  supplierData.forEach(d => {
+    const barW = d.score + '%';
+    const badgeClass = d.tier === 'High Risk' ? 'red' : d.tier === 'Medium Risk' ? 'amber' : 'green';
+    tbody.innerHTML += `<tr>
+      <td><strong>${d.dept}</strong></td>
+      <td>${d.orders.toLocaleString()}</td>
+      <td>${d.lateRate.toFixed(1)}%</td>
+      <td>${d.avgDelay.toFixed(2)}d</td>
+      <td><span class="badge ${badgeClass}">${d.tier}</span></td>
+      <td>
+        <strong style="color:${d.color}">${d.score}</strong>
+        <div class="risk-bar-wrap"><div class="risk-bar" style="width:${barW};background:${d.color}"></div></div>
+      </td>
+    </tr>`;
+  });
+}
+
+window.onload = function() {
+  buildTable();
+
+  // Donut
+  new Chart(document.getElementById('c-donut'), {
+    type:'doughnut',
+    data:{
+      labels:['Late delivery','Advance shipping','Shipping on time','Canceled'],
+      datasets:[{data:[22915,8753,6973,1041],backgroundColor:['#ef4444','#14b8a6','#4f8ef7','#8892a4'],borderWidth:0,hoverOffset:4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed.toLocaleString()}}}}}
+  });
+
+  // DRI Bar
+  new Chart(document.getElementById('c-dri'), {
+    type:'bar',
+    data:{
+      labels:supplierData.map(d=>d.dept),
+      datasets:[{
+        label:'DRI Score',
+        data:supplierData.map(d=>d.score),
+        backgroundColor:supplierData.map(d=>d.color),
+        borderRadius:4,borderSkipped:false
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},max:100},y:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:11}}}}
+    }
+  });
+
+  // Scatter
+  const scatterDatasets = [
+    {label:'High Risk',data:[{x:0.647,y:0.82,r:6},{x:0.647,y:0.83,r:5},{x:0.647,y:0.76,r:9}],backgroundColor:'rgba(239,68,68,0.7)',borderColor:'#ef4444'},
+    {label:'Medium Risk',data:[{x:0.620,y:0.72,r:18},{x:0.583,y:0.47,r:4},{x:0.603,y:0.63,r:10},{x:0.584,y:0.63,r:22}],backgroundColor:'rgba(245,166,35,0.7)',borderColor:'#f5a623'},
+    {label:'Low Risk',data:[{x:0.562,y:0.56,r:20},{x:0.556,y:0.54,r:14},{x:0.554,y:0.57,r:8},{x:0.551,y:0.54,r:12}],backgroundColor:'rgba(34,197,94,0.7)',borderColor:'#22c55e'},
+  ];
+  new Chart(document.getElementById('c-scatter'), {
+    type:'bubble',
+    data:{datasets:scatterDatasets},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{title:{display:true,text:'Late Rate',color:'#8892a4'},grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(2)},min:0.53,max:0.68},
+        y:{title:{display:true,text:'Avg Delay (days)',color:'#8892a4'},grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},min:0.3,max:1.0}
+      }
+    }
+  });
+
+  // Shipping Mode
+  new Chart(document.getElementById('c-mode'), {
+    type:'bar',
+    data:{
+      labels:['Second Class','First Class','Same Day','Standard Class'],
+      datasets:[{
+        label:'Avg Delay (days)',
+        data:[2.01,1.0,0.5,0.0],
+        backgroundColor:['#ef4444','#f5a623','#14b8a6','#22c55e'],
+        borderRadius:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{color:'#eef2ff'}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v+'d'}}}
+    }
+  });
+
+  // Region
+  new Chart(document.getElementById('c-region'), {
+    type:'bar',
+    data:{
+      labels:['Central Asia','South of USA','North Africa','South Asia','East Africa','Central Africa','N. Europe','W. Europe'],
+      datasets:[{
+        label:'Avg Delay',
+        data:[0.895,0.729,0.687,0.684,0.673,0.663,0.658,0.639],
+        backgroundColor:'rgba(79,142,247,0.8)',
+        borderRadius:4
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(2)+'d'},min:0.5},y:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:11}}}}
+    }
+  });
+
+  // Dept Delay
+  new Chart(document.getElementById('c-dept'), {
+    type:'bar',
+    data:{
+      labels:['Book Shop','Pet Shop','Technology','Fan Shop','Apparel','Discs Shop','Fitness','Golf','Footwear','Outdoors','Health & Beauty'],
+      datasets:[{
+        label:'Avg Delay',
+        data:[0.833,0.816,0.764,0.717,0.628,0.627,0.571,0.563,0.542,0.540,0.472],
+        backgroundColor:['#ef4444','#ef4444','#ef4444','#f5a623','#f5a623','#f5a623','#22c55e','#22c55e','#22c55e','#22c55e','#22c55e'],
+        borderRadius:4
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:10},maxRotation:30}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(1)+'d'}}}
+    }
+  });
+
+  // Forecast
+  const days=[];const actual=[];const upper=[];const lower=[];
+  for(let i=0;i<120;i++){
+    const d=new Date(2017,9,i);
+    days.push(d.toISOString().slice(0,10));
+    const base=20+Math.sin(i*0.45)*2+Math.sin(i*0.1)*1.5;
+    const noise=(Math.random()-0.5)*4;
+    actual.push(i<90?+(base+noise).toFixed(1):null);
+    upper.push(+(base+3+(i>89?i-89:0)*0.1).toFixed(1));
+    lower.push(+(base-3-(i>89?i-89:0)*0.1).toFixed(1));
+  }
+  new Chart(document.getElementById('c-forecast'), {
+    type:'line',
+    data:{
+      labels:days,
+      datasets:[
+        {label:'Upper',data:upper,borderColor:'transparent',backgroundColor:'rgba(79,142,247,0.15)',fill:'+1',pointRadius:0,tension:0.4},
+        {label:'Forecast',data:actual.map((v,i)=>v??upper[i]),borderColor:'#4f8ef7',backgroundColor:'transparent',pointRadius:0,tension:0.4,borderWidth:2},
+        {label:'Lower',data:lower,borderColor:'transparent',backgroundColor:'rgba(79,142,247,0.15)',fill:false,pointRadius:0,tension:0.4},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',maxTicksLimit:8}},
+        y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},min:8,max:36}
+      }
+    }
+  });
+
+  // Weekly
+  new Chart(document.getElementById('c-weekly'), {
+    type:'bar',
+    data:{
+      labels:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      datasets:[{
+        label:'Relative Demand',
+        data:[18,17,15,19,24,23,20],
+        backgroundColor:['#4f8ef7','#4f8ef7','#8892a4','#4f8ef7','#22c55e','#22c55e','#4f8ef7'],
+        borderRadius:4
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false},ticks:{color:'#eef2ff'}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'}}}
+    }
+  });
+
+  // Radar
+  new Chart(document.getElementById('c-perf'), {
+    type:'radar',
+    data:{
+      labels:['AUC-ROC','Accuracy','Precision\n(Late)','Recall\n(Late)','F1 Score'],
+      datasets:[{
+        label:'XGBoost',
+        data:[77,71,80,66,74],
+        borderColor:'#4f8ef7',
+        backgroundColor:'rgba(79,142,247,0.15)',
+        pointBackgroundColor:'#4f8ef7',
+        borderWidth:2,
+        pointRadius:4
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{r:{grid:{color:'#1e2a3a'},ticks:{display:false,backdropColor:'transparent'},pointLabels:{color:'#8892a4',font:{size:10}},angleLines:{color:'#1e2a3a'},min:50,max:100}}
+    }
+  });
+};
+</script>
+</body>
+</html>
