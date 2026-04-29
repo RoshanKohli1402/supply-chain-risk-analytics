@@ -3,41 +3,28 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>HERMES — Supply Chain Risk Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet"/>
+<title>HERMES — NexaCo Supply Chain Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --navy:#07090f;
-  --surface:#0d1117;
-  --card:#111827;
-  --card2:#161d2e;
-  --border:#1e2a3a;
-  --blue:#4f8ef7;
-  --teal:#14b8a6;
-  --amber:#f5a623;
-  --red:#ef4444;
-  --green:#22c55e;
-  --purple:#a78bfa;
-  --pink:#f472b6;
-  --text:#eef2ff;
-  --muted:#8892a4;
-  --font:'Outfit',sans-serif;
-  --mono:'Space Mono',monospace;
-  --sidebar:220px;
+  --navy:#07090f;--surface:#0d1117;--card:#111827;--card2:#161d2e;--border:#1e2a3a;
+  --blue:#4f8ef7;--teal:#14b8a6;--amber:#f5a623;--red:#ef4444;--green:#22c55e;--purple:#a78bfa;--pink:#f472b6;
+  --text:#eef2ff;--muted:#8892a4;--font:'Outfit',sans-serif;--mono:'Space Mono',monospace;--sidebar:220px;
 }
 html,body{height:100%;background:var(--navy);color:var(--text);font-family:var(--font)}
 body{display:flex;flex-direction:row;overflow:hidden}
-
-/* SIDEBAR */
 .sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh}
-.sidebar .logo{display:flex;align-items:center;gap:10px;padding:20px 16px;border-bottom:1px solid var(--border)}
-.logo-icon{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--blue) 0%,var(--teal) 100%);display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo{display:flex;align-items:center;gap:10px;padding:18px 16px;border-bottom:1px solid var(--border)}
+.logo-icon{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;font-size:16px}
 .logo-name{font-size:14px;font-weight:800;letter-spacing:3px;color:var(--text)}
 .logo-tagline{font-size:8px;color:var(--muted);letter-spacing:1px;font-family:var(--mono);margin-top:2px}
-.nav-tabs{display:flex;flex-direction:column;gap:2px;padding:14px 8px;flex:1}
-.nav-tab{width:100%;padding:11px 14px;background:none;border:none;border-left:3px solid transparent;color:var(--muted);font-family:var(--font);font-size:13px;letter-spacing:0.3px;cursor:pointer;transition:all 0.2s;font-weight:500;text-align:left;border-radius:0 8px 8px 0;display:flex;align-items:center;gap:10px}
+.company-badge{margin:12px 10px;background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.2);border-radius:10px;padding:10px 12px}
+.company-name{font-size:11px;font-weight:700;color:var(--blue)}
+.company-sub{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+.nav-tabs{display:flex;flex-direction:column;gap:2px;padding:8px 8px;flex:1}
+.nav-tab{width:100%;padding:10px 12px;background:none;border:none;border-left:3px solid transparent;color:var(--muted);font-family:var(--font);font-size:13px;cursor:pointer;transition:all 0.2s;font-weight:500;text-align:left;border-radius:0 8px 8px 0;display:flex;align-items:center;gap:10px}
 .nav-tab:hover{color:var(--text);background:rgba(255,255,255,0.04)}
 .nav-tab.active{color:var(--blue);border-left-color:var(--blue);background:rgba(79,142,247,0.08)}
 .tab-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
@@ -49,120 +36,107 @@ body{display:flex;flex-direction:row;overflow:hidden}
 .topbar{height:46px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;flex-shrink:0;gap:12px}
 .topbar-title{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--muted);font-family:var(--mono)}
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
-.topbar-badge{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:3px 10px;border-radius:20px}
-/* NAV legacy placeholder */
-
-
-/* CONTENT */
+.topbar-badge{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:3px 10px;border-radius:20px}
+.topbar-time{font-family:var(--mono);font-size:10px;color:var(--muted)}
 .content{flex:1;overflow-y:auto;padding:24px;scroll-behavior:smooth}
 .page{display:none;animation:fadeIn 0.3s ease}
 .page.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* HERO */
-.hero{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:16px;padding:32px;margin-bottom:24px;
-  position:relative;overflow:hidden;
-}
-.hero-grid{display:grid;grid-template-columns:1fr 240px;gap:24px;align-items:center}
-.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--teal);margin-bottom:10px}
-.hero h1{font-size:32px;font-weight:800;line-height:1.2;margin-bottom:10px}
+.hero{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:start}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--teal);margin-bottom:8px}
+.hero h1{font-size:26px;font-weight:800;line-height:1.2;margin-bottom:8px}
 .hero h1 span{color:var(--blue)}
-.hero p{font-size:14px;color:var(--muted);line-height:1.7;max-width:500px}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
-.tag{
-  background:var(--card2);border:1px solid var(--border);
-  border-radius:20px;padding:5px 14px;
-  font-size:11px;letter-spacing:1px;color:var(--muted);font-family:var(--mono);
-}
-.hero-stat{text-align:center;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px}
-.hero-stat-val{font-size:42px;font-weight:800;color:var(--red)}
-.hero-stat-label{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;margin-top:4px}
-.hero-stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
-
-/* SECTION TITLE */
-.sec-title{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-
-/* GRIDS */
+.hero p{font-size:13px;color:var(--muted);line-height:1.7}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--muted);font-family:var(--mono)}
+.kpi-mini{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.kpi-mini-val{font-size:28px;font-weight:800}
+.kpi-mini-label{font-size:10px;color:var(--muted);font-family:var(--mono);letter-spacing:1px;margin-top:4px}
+.kpi-mini-sub{font-size:11px;color:var(--muted);margin-top:4px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
 .g2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px}
-.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px}
-.g12{display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:20px}
-
-/* METRIC CARDS */
-.mc{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:12px;padding:18px;position:relative;overflow:hidden;
-}
+.mc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden}
 .mc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.mc.blue::after{background:var(--blue)}
-.mc.red::after{background:var(--red)}
-.mc.amber::after{background:var(--amber)}
-.mc.green::after{background:var(--green)}
-.mc.teal::after{background:var(--teal)}
-.mc.purple::after{background:var(--purple)}
+.mc.blue::after{background:var(--blue)}.mc.red::after{background:var(--red)}.mc.amber::after{background:var(--amber)}.mc.green::after{background:var(--green)}.mc.teal::after{background:var(--teal)}.mc.purple::after{background:var(--purple)}
 .mc-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px}
 .mc-val{font-size:34px;font-weight:800;line-height:1}
-.mc.blue .mc-val{color:var(--blue)}
-.mc.red .mc-val{color:var(--red)}
-.mc.amber .mc-val{color:var(--amber)}
-.mc.green .mc-val{color:var(--green)}
-.mc.teal .mc-val{color:var(--teal)}
-.mc.purple .mc-val{color:var(--purple)}
+.mc.blue .mc-val{color:var(--blue)}.mc.red .mc-val{color:var(--red)}.mc.amber .mc-val{color:var(--amber)}.mc.green .mc-val{color:var(--green)}.mc.teal .mc-val{color:var(--teal)}.mc.purple .mc-val{color:var(--purple)}
 .mc-sub{font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono)}
-
-/* CHART CARDS */
 .cc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
 .cc-title{font-size:15px;font-weight:700;margin-bottom:3px}
 .cc-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:16px;letter-spacing:1px}
-
-/* BADGES */
+.sec-title{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11px;font-family:var(--mono);font-weight:500}
 .badge.red{background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.2)}
 .badge.amber{background:rgba(245,166,35,0.15);color:#fbbf24;border:1px solid rgba(245,166,35,0.2)}
 .badge.green{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.2)}
 .badge.blue{background:rgba(79,142,247,0.15);color:#7eb3ff;border:1px solid rgba(79,142,247,0.2)}
-
-/* ALERT FEED */
-.alert-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.alert-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
 .alert-item:last-child{border-bottom:none}
 .alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.alert-dot.red{background:var(--red)}
-.alert-dot.amber{background:var(--amber)}
+.alert-dot.red{background:var(--red)}.alert-dot.amber{background:var(--amber)}.alert-dot.green{background:var(--green)}
 .alert-body{flex:1}
 .alert-title{font-size:13px;font-weight:700}
 .alert-desc{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:2px}
 .alert-time{font-size:11px;color:var(--muted);font-family:var(--mono);flex-shrink:0}
-
-/* RISK TABLE */
 .rt{width:100%;border-collapse:collapse}
 .rt th{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--muted);padding:8px 14px;text-align:left;border-bottom:1px solid var(--border)}
 .rt td{padding:12px 14px;font-size:13px;border-bottom:1px solid rgba(30,42,58,0.5)}
 .rt tr:hover td{background:var(--card2)}
 .risk-bar-wrap{width:100%;height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:4px}
 .risk-bar{height:100%;border-radius:3px}
-
-/* INSIGHT TILES */
 .insight-tile{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:14px}
 .it-icon{font-size:22px;margin-bottom:8px}
 .it-title{font-size:13px;font-weight:700;margin-bottom:4px}
 .it-text{font-size:12px;color:var(--muted);line-height:1.6}
-
-/* SHAP BARS */
 .shap-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .shap-lbl{font-family:var(--mono);font-size:12px;color:var(--muted);width:180px;flex-shrink:0;text-align:right}
 .shap-wrap{flex:1;height:8px;background:var(--border);border-radius:4px;overflow:hidden}
-.shap-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.shap-fill{height:100%;border-radius:4px}
 .shap-pct{font-family:var(--mono);font-size:12px;width:36px;text-align:right;flex-shrink:0}
-
-/* LEGEND */
 .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
 .legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-
-/* SCROLLBAR */
+/* SIMULATOR */
+.simulator{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.sim-title{font-size:17px;font-weight:800;margin-bottom:4px}
+.sim-sub{font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:20px}
+.sim-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:end}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted)}
+.form-select{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:var(--font);font-size:13px;outline:none;transition:border 0.2s;width:100%}
+.form-select:focus{border-color:var(--blue)}
+.form-select option{background:var(--card2)}
+.btn-primary{background:linear-gradient(135deg,var(--blue),var(--teal));border:none;border-radius:8px;padding:10px 20px;color:white;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;transition:opacity 0.2s;letter-spacing:0.5px}
+.btn-primary:hover{opacity:0.85}
+.btn-secondary{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 20px;color:var(--muted);font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px}
+.btn-secondary:hover{color:var(--text);border-color:var(--blue)}
+.result-panel{margin-top:20px;display:none}
+.result-panel.show{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;animation:fadeIn 0.4s ease}
+.result-card{border-radius:12px;padding:18px;text-align:center;border:1px solid var(--border)}
+.result-card.danger{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3)}
+.result-card.warning{background:rgba(245,166,35,0.1);border-color:rgba(245,166,35,0.3)}
+.result-card.safe{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3)}
+.result-card.info{background:rgba(79,142,247,0.1);border-color:rgba(79,142,247,0.3)}
+.result-val{font-size:32px;font-weight:800;margin-bottom:4px}
+.result-label{font-size:11px;font-family:var(--mono);color:var(--muted);letter-spacing:1px}
+.result-rec{margin-top:14px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.result-rec-title{font-size:13px;font-weight:700;margin-bottom:6px}
+.result-rec-text{font-size:12px;color:var(--muted);line-height:1.6}
+/* ORDER FEED */
+.order-feed{max-height:320px;overflow-y:auto}
+.order-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:13px;transition:background 0.2s;min-width:0}
+.order-row:hover{background:var(--card2)}
+.order-row:last-child{border-bottom:none}
+.order-id{font-family:var(--mono);font-size:11px;color:var(--muted);width:82px;flex-shrink:0}
+.order-dept{flex:1;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.order-mode{color:var(--muted);font-size:11px;width:120px;flex-shrink:0;white-space:nowrap}
+.order-risk{width:44px;text-align:right;flex-shrink:0;font-family:var(--mono);font-weight:700;font-size:13px}
+.order-status{width:130px;text-align:right;flex-shrink:0;white-space:nowrap}
+@keyframes pulse{0%{background:rgba(79,142,247,0.12)}100%{background:transparent}}
+.pulse{animation:pulse 1.2s ease}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:var(--navy)}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -173,13 +147,15 @@ body{display:flex;flex-direction:row;overflow:hidden}
 <div class="sidebar">
   <div class="logo">
     <div class="logo-icon">⚡</div>
-    <div>
-      <div class="logo-name">HERMES</div>
-      <div class="logo-tagline">SUPPLY CHAIN INTEL</div>
-    </div>
+    <div><div class="logo-name">HERMES</div><div class="logo-tagline">SUPPLY CHAIN INTEL</div></div>
+  </div>
+  <div class="company-badge">
+    <div class="company-name">🏢 NexaCo Global</div>
+    <div class="company-sub">ACTIVE TENANT · PRO PLAN</div>
   </div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="show('overview',this)"><span class="tab-icon">📊</span>Overview</button>
+    <button class="nav-tab" onclick="show('simulator',this)"><span class="tab-icon">🎯</span>Risk Simulator</button>
     <button class="nav-tab" onclick="show('supplier',this)"><span class="tab-icon">⚠️</span>Disruption Index</button>
     <button class="nav-tab" onclick="show('delivery',this)"><span class="tab-icon">🚚</span>Delivery Analytics</button>
     <button class="nav-tab" onclick="show('forecast',this)"><span class="tab-icon">📈</span>Demand Forecast</button>
@@ -187,7 +163,7 @@ body{display:flex;flex-direction:row;overflow:hidden}
   </div>
   <div class="sidebar-footer">
     <div class="live-dot"></div><span class="live-label">SYSTEM LIVE</span>
-    <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:0.5px">39,682 RECORDS · DataCo</div>
+    <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px">39,682 RECORDS · DataCo</div>
   </div>
 </div>
 
@@ -195,71 +171,63 @@ body{display:flex;flex-direction:row;overflow:hidden}
 <div class="topbar">
   <span class="topbar-title" id="topbar-label">EXECUTIVE OVERVIEW</span>
   <div class="topbar-right">
+    <span class="topbar-time" id="clock"></span>
     <span class="topbar-badge">XGBoost · AUC 0.77</span>
-    <span class="topbar-badge">Prophet · 90d</span>
-    <span class="topbar-badge">SHAP Explainability</span>
+    <span class="topbar-badge">NexaCo Global Trading</span>
   </div>
 </div>
 <div class="content">
 
-<!-- ======= PAGE: OVERVIEW ======= -->
+<!-- OVERVIEW -->
 <div class="page active" id="page-overview">
-
   <div class="hero">
     <div class="hero-grid">
       <div>
-        <div class="hero-eyebrow">GLOBAL SUPPLY NETWORK · 2015–2018</div>
-        <h1>Network <span>Disruption</span><br/>Intelligence Engine</h1>
-        <p>Predictive analytics across 39,682 supply chain transactions. XGBoost risk model with 77% AUC identifies late delivery signals before shipment. Supplier risk scored across 11 departments using a composite Disruption Risk Index.</p>
+        <div class="hero-eyebrow">NEXACO GLOBAL · SUPPLY NETWORK · 2015–2018</div>
+        <h1>Network <span>Disruption</span><br/>Intelligence</h1>
+        <p>Real-time risk monitoring across NexaCo's supply chain. XGBoost model predicts late deliveries before dispatch. Supplier risk scored via composite Disruption Risk Index.</p>
         <div class="hero-tags">
           <span class="tag">XGBoost · AUC 0.77</span>
           <span class="tag">SHAP Explainability</span>
-          <span class="tag">Prophet 90-Day Forecast</span>
-          <span class="tag">Disruption Risk Index</span>
-          <span class="tag">DataCo Dataset</span>
+          <span class="tag">Prophet Forecast</span>
         </div>
       </div>
-      <div>
-        <div class="hero-stat">
-          <div class="hero-stat-val">57.7%</div>
-          <div class="hero-stat-label">LATE DELIVERY RATE</div>
-          <div class="hero-stat-sub">22,915 of 39,682 orders arrived late</div>
-        </div>
+      <div class="kpi-mini">
+        <div class="kpi-mini-val" style="color:var(--red)">57.7%</div>
+        <div class="kpi-mini-label">LATE DELIVERY RATE</div>
+        <div class="kpi-mini-sub">22,915 of 39,682 orders</div>
+      </div>
+      <div class="kpi-mini">
+        <div class="kpi-mini-val" style="color:var(--amber)">18.6%</div>
+        <div class="kpi-mini-label">LOSS ORDER RATE</div>
+        <div class="kpi-mini-sub">7,383 unprofitable orders</div>
       </div>
     </div>
   </div>
 
+  <div class="sec-title">NEXACO LIVE ORDER FEED</div>
+  <div class="cc">
+    <div class="cc-title">Real-Time Shipment Monitor</div>
+    <div class="cc-sub">NEXACO ACTIVE ORDERS · UPDATING EVERY 4 SECONDS</div>
+    <div style="display:flex;gap:12px;font-family:var(--mono);font-size:10px;color:var(--muted);padding:0 14px 10px;border-bottom:1px solid var(--border);letter-spacing:1px">
+      <span style="width:82px">ORDER ID</span><span style="flex:1">DEPARTMENT</span><span style="width:120px">SHIPPING MODE</span><span style="width:44px;text-align:right">RISK</span><span style="width:130px;text-align:right">STATUS</span>
+    </div>
+    <div class="order-feed" id="order-feed"></div>
+  </div>
+
   <div class="sec-title">KEY PERFORMANCE INDICATORS</div>
   <div class="g4">
-    <div class="mc blue">
-      <div class="mc-label">TOTAL ORDERS</div>
-      <div class="mc-val">39,682</div>
-      <div class="mc-sub">DataCo 2015–2018</div>
-    </div>
-    <div class="mc red">
-      <div class="mc-label">LATE DELIVERY RATE</div>
-      <div class="mc-val">57.7%</div>
-      <div class="mc-sub">22,915 late orders</div>
-    </div>
-    <div class="mc amber">
-      <div class="mc-label">AVG SHIPPING DELAY</div>
-      <div class="mc-val">0.6d</div>
-      <div class="mc-sub">Max 4 days observed</div>
-    </div>
-    <div class="mc amber">
-      <div class="mc-label">LOSS ORDER RATE</div>
-      <div class="mc-val">18.6%</div>
-      <div class="mc-sub">7,383 unprofitable</div>
-    </div>
+    <div class="mc blue"><div class="mc-label">TOTAL ORDERS</div><div class="mc-val">39,682</div><div class="mc-sub">NexaCo 2015–2018</div></div>
+    <div class="mc red"><div class="mc-label">LATE DELIVERY RATE</div><div class="mc-val">57.7%</div><div class="mc-sub">22,915 late orders</div></div>
+    <div class="mc amber"><div class="mc-label">AVG SHIPPING DELAY</div><div class="mc-val">0.6d</div><div class="mc-sub">Max 4 days observed</div></div>
+    <div class="mc amber"><div class="mc-label">LOSS ORDER RATE</div><div class="mc-val">18.6%</div><div class="mc-sub">7,383 unprofitable</div></div>
   </div>
 
   <div class="g2">
     <div class="cc">
       <div class="cc-title">Delivery Status Distribution</div>
-      <div class="cc-sub">BREAKDOWN OF ALL 39,682 ORDERS</div>
-      <div style="position:relative;height:200px">
-        <canvas id="c-donut" role="img" aria-label="Delivery status: Late 57.7%, Advance 22.1%, On Time 17.6%, Canceled 2.6%">Late 57.7%, Advance 22.1%, On Time 17.6%, Canceled 2.6%</canvas>
-      </div>
+      <div class="cc-sub">BREAKDOWN OF ALL 39,682 NEXACO ORDERS</div>
+      <div style="position:relative;height:200px"><canvas id="c-donut"></canvas></div>
       <div class="legend">
         <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Late 57.7%</span>
         <span class="legend-item"><span class="legend-dot" style="background:#14b8a6"></span>Advance 22.1%</span>
@@ -267,109 +235,144 @@ body{display:flex;flex-direction:row;overflow:hidden}
         <span class="legend-item"><span class="legend-dot" style="background:#8892a4"></span>Canceled 2.6%</span>
       </div>
     </div>
-
     <div class="cc">
       <div class="cc-title">High Risk Alerts</div>
-      <div class="cc-sub">RECENT DISRUPTIONS REQUIRING ATTENTION</div>
-      <div class="alert-item">
-        <div class="alert-dot red"></div>
-        <div class="alert-body">
-          <div class="alert-title">Order #55985 — Pet Shop</div>
-          <div class="alert-desc">Second Class · Late delivery · DRI: 82.7</div>
-        </div>
-        <div class="alert-time">2017-03-28</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-dot red"></div>
-        <div class="alert-body">
-          <div class="alert-title">Order #3225 — Book Shop</div>
-          <div class="alert-desc">Second Class · Late delivery · DRI: 75.6</div>
-        </div>
-        <div class="alert-time">2015-02-17</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-dot amber"></div>
-        <div class="alert-body">
-          <div class="alert-title">Order #55810 — Technology</div>
-          <div class="alert-desc">First Class · Shipping canceled · DRI: 70.1</div>
-        </div>
-        <div class="alert-time">2017-03-25</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-dot amber"></div>
-        <div class="alert-body">
-          <div class="alert-title">Order #12044 — Fan Shop</div>
-          <div class="alert-desc">Second Class · Late delivery · DRI: 59.7</div>
-        </div>
-        <div class="alert-time">2016-11-09</div>
-      </div>
-      <div class="alert-item">
-        <div class="alert-dot amber"></div>
-        <div class="alert-body">
-          <div class="alert-title">Order #38812 — Apparel</div>
-          <div class="alert-desc">First Class · Late delivery · DRI: 34.7</div>
-        </div>
-        <div class="alert-time">2017-01-14</div>
-      </div>
+      <div class="cc-sub">NEXACO DISRUPTIONS REQUIRING IMMEDIATE ACTION</div>
+      <div class="alert-item"><div class="alert-dot red"></div><div class="alert-body"><div class="alert-title">Order #55985 — Pet Shop</div><div class="alert-desc">Second Class · Late delivery · DRI: 82.7</div></div><div class="alert-time">2017-03-28</div></div>
+      <div class="alert-item"><div class="alert-dot red"></div><div class="alert-body"><div class="alert-title">Order #3225 — Book Shop</div><div class="alert-desc">Second Class · Late delivery · DRI: 75.6</div></div><div class="alert-time">2015-02-17</div></div>
+      <div class="alert-item"><div class="alert-dot amber"></div><div class="alert-body"><div class="alert-title">Order #55810 — Technology</div><div class="alert-desc">First Class · Shipping canceled · DRI: 70.1</div></div><div class="alert-time">2017-03-25</div></div>
+      <div class="alert-item"><div class="alert-dot amber"></div><div class="alert-body"><div class="alert-title">Order #12044 — Fan Shop</div><div class="alert-desc">Second Class · Late delivery · DRI: 59.7</div></div><div class="alert-time">2016-11-09</div></div>
     </div>
   </div>
 
-  <div class="sec-title">CRITICAL INSIGHT SUMMARY</div>
+  <div class="sec-title">CRITICAL INSIGHTS</div>
   <div class="g3">
-    <div class="insight-tile">
-      <div class="it-icon">🚨</div>
-      <div class="it-title">Second Class Shipping Crisis</div>
-      <div class="it-text">Second Class shipping averages 2.01 days late — 4x worse than Standard Class. Accounts for the dominant share of all delay variance in the network.</div>
+    <div class="insight-tile"><div class="it-icon">🚨</div><div class="it-title">Second Class Shipping Crisis</div><div class="it-text">Second Class averages 2.01 days late — 4x worse than Standard Class. Primary driver of NexaCo's 57.7% late delivery rate.</div></div>
+    <div class="insight-tile"><div class="it-icon">📦</div><div class="it-title">Pet Shop & Book Shop — Critical</div><div class="it-text">DRI scores of 82.7 and 75.6. Both show 64.7% late delivery rate with avg delay exceeding 0.8 days. Immediate supplier review recommended.</div></div>
+    <div class="insight-tile"><div class="it-icon">📉</div><div class="it-title">18.6% Orders Lose Money</div><div class="it-text">7,383 NexaCo orders generated negative profit. Min: −$3,366. Concentrated in high-discount + second class shipping combinations.</div></div>
+  </div>
+</div>
+
+<!-- RISK SIMULATOR -->
+<div class="page" id="page-simulator">
+  <div class="sec-title">NEXACO SHIPMENT RISK SIMULATOR</div>
+  <div class="simulator">
+    <div class="sim-title">🎯 Predict Delivery Risk Before Dispatch</div>
+    <div class="sim-sub">NEXACO PROCUREMENT TOOL · ENTER ORDER DETAILS → GET INSTANT AI RISK SCORE</div>
+    <div class="sim-grid">
+      <div class="form-group">
+        <label class="form-label">DEPARTMENT</label>
+        <select class="form-select" id="inp-dept">
+          <option value="pet_shop">Pet Shop</option>
+          <option value="book_shop">Book Shop</option>
+          <option value="technology">Technology</option>
+          <option value="fan_shop">Fan Shop</option>
+          <option value="apparel" selected>Apparel</option>
+          <option value="discs_shop">Discs Shop</option>
+          <option value="health">Health & Beauty</option>
+          <option value="golf">Golf</option>
+          <option value="footwear">Footwear</option>
+          <option value="fitness">Fitness</option>
+          <option value="outdoors">Outdoors</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">SHIPPING MODE</label>
+        <select class="form-select" id="inp-mode">
+          <option value="second_class">Second Class</option>
+          <option value="first_class">First Class</option>
+          <option value="same_day">Same Day</option>
+          <option value="standard" selected>Standard Class</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">SCHEDULED DAYS</label>
+        <select class="form-select" id="inp-days">
+          <option value="1">1 Day</option>
+          <option value="2">2 Days</option>
+          <option value="3" selected>3 Days</option>
+          <option value="4">4 Days</option>
+          <option value="5">5 Days</option>
+          <option value="6">6+ Days</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">MARKET</label>
+        <select class="form-select" id="inp-market">
+          <option value="europe">Europe</option>
+          <option value="usca" selected>USCA</option>
+          <option value="latam">LATAM</option>
+          <option value="pacific">Pacific Asia</option>
+          <option value="africa">Africa</option>
+        </select>
+      </div>
     </div>
-    <div class="insight-tile">
-      <div class="it-icon">📦</div>
-      <div class="it-title">Pet Shop & Book Shop — Critical</div>
-      <div class="it-text">Disruption Risk Index scores of 82.7 and 75.6 respectively. Both departments show 64.7% late delivery rate with avg delay exceeding 0.8 days.</div>
+    <div style="margin-top:16px;display:flex;gap:12px;align-items:center">
+      <button class="btn-primary" onclick="predictRisk()">⚡ Analyse Risk</button>
+      <button class="btn-secondary" onclick="addToSimFeed()">+ Add to NexaCo Feed</button>
     </div>
-    <div class="insight-tile">
-      <div class="it-icon">📉</div>
-      <div class="it-title">18.6% Orders Lose Money</div>
-      <div class="it-text">7,383 orders generated negative profit. Min profit observed: −$3,366. Concentrated in high-discount orders with second class shipping.</div>
+
+    <div class="result-panel" id="result-panel">
+      <div class="result-card" id="res-late-card">
+        <div class="result-val" id="res-late-val">—</div>
+        <div class="result-label">LATE DELIVERY RISK</div>
+      </div>
+      <div class="result-card info">
+        <div class="result-val" style="color:var(--blue)" id="res-dri">—</div>
+        <div class="result-label">DISRUPTION RISK INDEX</div>
+      </div>
+      <div class="result-card" id="res-verdict-card">
+        <div class="result-val" id="res-verdict">—</div>
+        <div class="result-label">VERDICT</div>
+      </div>
+      <div class="result-card" id="res-delay-card">
+        <div class="result-val" id="res-delay">—</div>
+        <div class="result-label">EXPECTED DELAY</div>
+      </div>
+    </div>
+    <div id="res-rec" style="display:none;margin-top:14px" class="result-rec">
+      <div class="result-rec-title" id="rec-title"></div>
+      <div class="result-rec-text" id="rec-text"></div>
+    </div>
+  </div>
+
+  <div class="sec-title">HOW THE MODEL SCORES YOUR ORDER</div>
+  <div class="g3">
+    <div class="insight-tile"><div class="it-icon">🚢</div><div class="it-title">Shipping Mode — 45% Weight</div><div class="it-text">Biggest risk factor. Second Class = high risk. Standard Class = near-zero delay. Switching modes is the fastest ROI intervention for NexaCo.</div></div>
+    <div class="insight-tile"><div class="it-icon">📅</div><div class="it-title">Scheduled Days — 32% Weight</div><div class="it-text">Longer planned windows = higher late risk. NexaCo's order processing systematically underestimates fulfillment time across all departments.</div></div>
+    <div class="insight-tile"><div class="it-icon">🏪</div><div class="it-title">Department DRI — 23% Weight</div><div class="it-text">Pet Shop (DRI 82.7) orders start with inherent disadvantage vs Golf (DRI 18.0). Historical supplier performance is baked into every prediction.</div></div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-title">NexaCo Simulated Order Log</div>
+    <div class="cc-sub">ORDERS ADDED VIA SIMULATOR THIS SESSION</div>
+    <div style="display:flex;gap:12px;font-family:var(--mono);font-size:10px;color:var(--muted);padding:0 14px 10px;border-bottom:1px solid var(--border);letter-spacing:1px">
+      <span style="width:90px">ORDER ID</span><span style="flex:1">DEPARTMENT</span><span style="width:120px">MODE</span><span style="width:44px;text-align:right">RISK</span><span style="width:130px;text-align:right">STATUS</span>
+    </div>
+    <div class="order-feed" id="sim-feed">
+      <div style="padding:24px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px">No orders simulated yet — use the form above.</div>
     </div>
   </div>
 </div>
 
-<!-- ======= PAGE: SUPPLIER RISK ======= -->
+<!-- SUPPLIER RISK -->
 <div class="page" id="page-supplier">
-  <div class="sec-title">DISRUPTION RISK INDEX — DEPARTMENT SCORECARD</div>
-
+  <div class="sec-title">DISRUPTION RISK INDEX — NEXACO DEPARTMENT SCORECARD</div>
   <div class="g3" style="margin-bottom:20px">
-    <div class="mc red">
-      <div class="mc-label">HIGH RISK DEPARTMENTS</div>
-      <div class="mc-val">3</div>
-      <div class="mc-sub">Pet Shop, Book Shop, Technology</div>
-    </div>
-    <div class="mc amber">
-      <div class="mc-label">MEDIUM RISK DEPARTMENTS</div>
-      <div class="mc-val">4</div>
-      <div class="mc-sub">Fan Shop, H&amp;B, Discs, Apparel</div>
-    </div>
-    <div class="mc green">
-      <div class="mc-label">LOW RISK DEPARTMENTS</div>
-      <div class="mc-val">4</div>
-      <div class="mc-sub">Golf, Footwear, Fitness, Outdoors</div>
-    </div>
+    <div class="mc red"><div class="mc-label">HIGH RISK DEPARTMENTS</div><div class="mc-val">3</div><div class="mc-sub">Pet Shop, Book Shop, Technology</div></div>
+    <div class="mc amber"><div class="mc-label">MEDIUM RISK DEPARTMENTS</div><div class="mc-val">4</div><div class="mc-sub">Fan Shop, H&B, Discs, Apparel</div></div>
+    <div class="mc green"><div class="mc-label">LOW RISK DEPARTMENTS</div><div class="mc-val">4</div><div class="mc-sub">Golf, Footwear, Fitness, Outdoors</div></div>
   </div>
-
   <div class="g2">
     <div class="cc">
       <div class="cc-title">Disruption Risk Index by Department</div>
       <div class="cc-sub">COMPOSITE SCORE 0–100 (HIGHER = MORE RISK)</div>
-      <div style="position:relative;height:320px">
-        <canvas id="c-dri" role="img" aria-label="DRI scores by department">Pet Shop 82.7, Book Shop 75.6, Technology 70.1, Fan Shop 59.7, Health Beauty 40.8, Discs Shop 39.7, Apparel 34.7, Golf 18.0, Footwear 15.6, Fitness 13.9, Outdoors 13.7</canvas>
-      </div>
+      <div style="position:relative;height:320px"><canvas id="c-dri"></canvas></div>
     </div>
     <div class="cc">
       <div class="cc-title">Late Rate vs Avg Delay</div>
       <div class="cc-sub">BUBBLE SIZE = ORDER VOLUME · COLOR = RISK TIER</div>
-      <div style="position:relative;height:320px">
-        <canvas id="c-scatter" role="img" aria-label="Scatter plot of late rate vs average delay by department">Departments plotted by late delivery rate and average delay.</canvas>
-      </div>
+      <div style="position:relative;height:320px"><canvas id="c-scatter"></canvas></div>
       <div class="legend">
         <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>High Risk</span>
         <span class="legend-item"><span class="legend-dot" style="background:#f5a623"></span>Medium Risk</span>
@@ -377,279 +380,130 @@ body{display:flex;flex-direction:row;overflow:hidden}
       </div>
     </div>
   </div>
-
   <div class="cc">
     <div class="cc-title">Detailed Risk Scorecard</div>
-    <div class="cc-sub">ALL DEPARTMENTS · WEIGHTED COMPOSITE: LATE RATE 40% · AVG DELAY 30% · LOSS RATE 20% · DISCOUNT PRESSURE 10%</div>
-    <table class="rt">
-      <thead>
-        <tr>
-          <th>DEPARTMENT</th>
-          <th>ORDERS</th>
-          <th>LATE RATE</th>
-          <th>AVG DELAY</th>
-          <th>RISK TIER</th>
-          <th>DRI SCORE</th>
-        </tr>
-      </thead>
-      <tbody id="risk-tbody"></tbody>
-    </table>
+    <div class="cc-sub">WEIGHTED: LATE RATE 40% · AVG DELAY 30% · LOSS RATE 20% · DISCOUNT PRESSURE 10%</div>
+    <table class="rt"><thead><tr><th>DEPARTMENT</th><th>ORDERS</th><th>LATE RATE</th><th>AVG DELAY</th><th>RISK TIER</th><th>DRI SCORE</th></tr></thead>
+    <tbody id="risk-tbody"></tbody></table>
   </div>
 </div>
 
-<!-- ======= PAGE: DELIVERY ======= -->
+<!-- DELIVERY -->
 <div class="page" id="page-delivery">
-  <div class="sec-title">DELIVERY ANALYTICS — NETWORK PERFORMANCE</div>
-
+  <div class="sec-title">DELIVERY ANALYTICS — NEXACO NETWORK PERFORMANCE</div>
   <div class="g4" style="margin-bottom:20px">
-    <div class="mc red">
-      <div class="mc-label">LATE DELIVERIES</div>
-      <div class="mc-val">22,915</div>
-      <div class="mc-sub">57.7% of all orders</div>
-    </div>
-    <div class="mc teal">
-      <div class="mc-label">ADVANCE SHIPPING</div>
-      <div class="mc-val">8,753</div>
-      <div class="mc-sub">22.1% ahead of schedule</div>
-    </div>
-    <div class="mc green">
-      <div class="mc-label">ON TIME</div>
-      <div class="mc-val">6,973</div>
-      <div class="mc-sub">17.6% on schedule</div>
-    </div>
-    <div class="mc amber">
-      <div class="mc-label">CANCELED</div>
-      <div class="mc-val">1,041</div>
-      <div class="mc-sub">2.6% — revenue lost</div>
-    </div>
+    <div class="mc red"><div class="mc-label">LATE DELIVERIES</div><div class="mc-val">22,915</div><div class="mc-sub">57.7% of all orders</div></div>
+    <div class="mc teal"><div class="mc-label">ADVANCE SHIPPING</div><div class="mc-val">8,753</div><div class="mc-sub">22.1% ahead of schedule</div></div>
+    <div class="mc green"><div class="mc-label">ON TIME</div><div class="mc-val">6,973</div><div class="mc-sub">17.6% on schedule</div></div>
+    <div class="mc amber"><div class="mc-label">CANCELED</div><div class="mc-val">1,041</div><div class="mc-sub">2.6% — revenue lost</div></div>
   </div>
-
   <div class="g2">
     <div class="cc">
       <div class="cc-title">Avg Delay by Shipping Mode</div>
-      <div class="cc-sub">SECOND CLASS IS THE PRIMARY RISK DRIVER</div>
-      <div style="position:relative;height:220px">
-        <canvas id="c-mode" role="img" aria-label="Average delay by shipping mode: Second Class 2.01d, First Class 1.0d, Same Day 0.5d, Standard Class 0.0d">Second Class 2.01 days, First Class 1.0 days, Same Day 0.5 days, Standard Class 0 days.</canvas>
-      </div>
+      <div class="cc-sub">SECOND CLASS IS NEXACO'S PRIMARY RISK DRIVER</div>
+      <div style="position:relative;height:220px"><canvas id="c-mode"></canvas></div>
     </div>
     <div class="cc">
       <div class="cc-title">Top Delayed Regions</div>
       <div class="cc-sub">AVG DELAY DAYS BY ORDER REGION</div>
-      <div style="position:relative;height:220px">
-        <canvas id="c-region" role="img" aria-label="Top delayed regions: Central Asia 0.895, South of USA 0.729, North Africa 0.687, South Asia 0.684, East Africa 0.672">Top 8 most delayed regions shown.</canvas>
-      </div>
+      <div style="position:relative;height:220px"><canvas id="c-region"></canvas></div>
     </div>
   </div>
-
   <div class="cc">
     <div class="cc-title">Delay by Department</div>
-    <div class="cc-sub">BOOK SHOP AND PET SHOP ARE CONSISTENTLY WORST — HIGH DRI CONFIRMED</div>
-    <div style="position:relative;height:200px">
-      <canvas id="c-dept" role="img" aria-label="Average delay by department showing Book Shop and Pet Shop as highest">Department delay analysis.</canvas>
-    </div>
+    <div class="cc-sub">BOOK SHOP AND PET SHOP CONSISTENTLY WORST PERFORMERS</div>
+    <div style="position:relative;height:200px"><canvas id="c-dept"></canvas></div>
   </div>
-
   <div class="sec-title">KEY DELIVERY INSIGHTS</div>
   <div class="g3">
-    <div class="insight-tile">
-      <div class="it-icon">🚂</div>
-      <div class="it-title">Second Class = 2x Late Rate</div>
-      <div class="it-text">Second Class shipping produces 2.01 days avg delay — 4x worse than Standard Class (0.0d). Switching high-value orders to Standard Class could halve network delay.</div>
-    </div>
-    <div class="insight-tile">
-      <div class="it-icon">🌍</div>
-      <div class="it-title">Central Asia Highest Risk Region</div>
-      <div class="it-text">Central Asia shows 0.895 avg delay — 57% above the global network average of 0.57. Followed by South of USA (0.73d) and North Africa (0.69d).</div>
-    </div>
-    <div class="insight-tile">
-      <div class="it-icon">🛍️</div>
-      <div class="it-title">Book Shop Worst Department</div>
-      <div class="it-text">Book Shop averages 0.83 days delay — higher than any other department. Low order volume (102) but 64.7% late rate flags a structural supplier issue.</div>
-    </div>
+    <div class="insight-tile"><div class="it-icon">🚂</div><div class="it-title">Second Class = 4x Delay Rate</div><div class="it-text">2.01 days avg delay vs 0.0d for Standard Class. Switching NexaCo's Second Class volume to Standard could save millions in SLA penalties.</div></div>
+    <div class="insight-tile"><div class="it-icon">🌍</div><div class="it-title">Central Asia Highest Risk Region</div><div class="it-text">0.895 avg delay — 57% above global average of 0.57. NexaCo should consider buffer stock strategies for Central Asia orders.</div></div>
+    <div class="insight-tile"><div class="it-icon">🛍️</div><div class="it-title">Book Shop Structural Issue</div><div class="it-text">0.83 days avg delay with only 102 orders. Small volume but 64.7% late rate — signals a supplier-level problem requiring immediate review.</div></div>
   </div>
 </div>
 
-<!-- ======= PAGE: FORECAST ======= -->
+<!-- FORECAST -->
 <div class="page" id="page-forecast">
   <div class="sec-title">DEMAND FORECASTING — PROPHET MODEL · 90-DAY OUTLOOK</div>
-
   <div class="g4" style="margin-bottom:20px">
-    <div class="mc blue">
-      <div class="mc-label">AVG DAILY ORDERS</div>
-      <div class="mc-val">~20</div>
-      <div class="mc-sub">Stable 2015–2018</div>
-    </div>
-    <div class="mc green">
-      <div class="mc-label">PEAK DAY</div>
-      <div class="mc-val">Thu</div>
-      <div class="mc-sub">+22% above weekly avg</div>
-    </div>
-    <div class="mc amber">
-      <div class="mc-label">SEASONAL DIP</div>
-      <div class="mc-val">Jan–Feb</div>
-      <div class="mc-sub">Annual winter slowdown</div>
-    </div>
-    <div class="mc teal">
-      <div class="mc-label">90-DAY TREND</div>
-      <div class="mc-val">↑ 15%</div>
-      <div class="mc-sub">Upward volume expected</div>
-    </div>
+    <div class="mc blue"><div class="mc-label">AVG DAILY ORDERS</div><div class="mc-val">~20</div><div class="mc-sub">Stable 2015–2018</div></div>
+    <div class="mc green"><div class="mc-label">PEAK DAY</div><div class="mc-val">Thu</div><div class="mc-sub">+22% above weekly avg</div></div>
+    <div class="mc amber"><div class="mc-label">SEASONAL DIP</div><div class="mc-val">Jan–Feb</div><div class="mc-sub">Annual winter slowdown</div></div>
+    <div class="mc teal"><div class="mc-label">90-DAY TREND</div><div class="mc-val">↑ 15%</div><div class="mc-sub">Upward volume expected</div></div>
   </div>
-
   <div class="cc">
     <div class="cc-title">90-Day Demand Forecast</div>
-    <div class="cc-sub">DAILY ORDER VOLUME WITH CONFIDENCE BAND (PROPHET MODEL)</div>
-    <div style="position:relative;height:260px">
-      <canvas id="c-forecast" role="img" aria-label="90-day demand forecast showing stable ~20 orders per day with slight upward trend">Demand forecast with confidence intervals.</canvas>
-    </div>
+    <div class="cc-sub">NEXACO DAILY ORDER VOLUME WITH CONFIDENCE BAND (PROPHET MODEL)</div>
+    <div style="position:relative;height:260px"><canvas id="c-forecast"></canvas></div>
     <div class="legend">
       <span class="legend-item"><span class="legend-dot" style="background:#4f8ef7"></span>Forecast</span>
       <span class="legend-item"><span class="legend-dot" style="background:rgba(79,142,247,0.2)"></span>Confidence Band</span>
     </div>
   </div>
-
   <div class="g2">
     <div class="cc">
       <div class="cc-title">Weekly Seasonality Pattern</div>
       <div class="cc-sub">THU/FRI = PEAK · TUE = TROUGH</div>
-      <div style="position:relative;height:200px">
-        <canvas id="c-weekly" role="img" aria-label="Weekly seasonality showing Thursday and Friday as peak days">Weekly order patterns.</canvas>
-      </div>
+      <div style="position:relative;height:200px"><canvas id="c-weekly"></canvas></div>
     </div>
     <div class="cc">
       <div class="cc-title">Forecasting Insights</div>
       <div class="cc-sub">KEY PATTERNS FROM PROPHET DECOMPOSITION</div>
       <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px">
-        <div class="insight-tile">
-          <div class="it-title">Weekend Restocking Effect</div>
-          <div class="it-text">Orders spike 22% on Thursdays and Fridays as retailers place restocking orders ahead of weekend demand peaks.</div>
-        </div>
-        <div class="insight-tile">
-          <div class="it-title">Jan–Feb Annual Dip</div>
-          <div class="it-text">Yearly seasonality shows a consistent dip in January–February each year — post-holiday demand contraction across all departments.</div>
-        </div>
-        <div class="insight-tile">
-          <div class="it-title">Sep–Oct Peak Season</div>
-          <div class="it-text">September and October show the strongest yearly demand surge — pre-holiday inventory stocking cycle drives order spikes.</div>
-        </div>
+        <div class="insight-tile"><div class="it-title">Weekend Restocking Effect</div><div class="it-text">NexaCo orders spike 22% on Thursdays and Fridays. Pre-position stock by Wednesday to meet demand and avoid emergency Second Class shipments.</div></div>
+        <div class="insight-tile"><div class="it-title">Jan–Feb Annual Dip</div><div class="it-text">Consistent post-holiday demand contraction every year. NexaCo can use this window for supplier renegotiations and inventory audits.</div></div>
+        <div class="insight-tile"><div class="it-title">Sep–Oct Peak Season</div><div class="it-text">Strongest yearly demand surge. Increase Standard Class allocation in this window to protect service levels during peak volume.</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ======= PAGE: ML INSIGHTS ======= -->
+<!-- ML INSIGHTS -->
 <div class="page" id="page-ml">
   <div class="sec-title">ML INSIGHTS — XGBOOST LATE DELIVERY PREDICTION MODEL</div>
-
   <div class="g4" style="margin-bottom:20px">
-    <div class="mc blue">
-      <div class="mc-label">AUC-ROC SCORE</div>
-      <div class="mc-val">0.77</div>
-      <div class="mc-sub">Prediction capability</div>
-    </div>
-    <div class="mc green">
-      <div class="mc-label">ACCURACY</div>
-      <div class="mc-val">71%</div>
-      <div class="mc-sub">True classification rate</div>
-    </div>
-    <div class="mc teal">
-      <div class="mc-label">PRECISION (LATE)</div>
-      <div class="mc-val">80%</div>
-      <div class="mc-sub">Reliability on positive class</div>
-    </div>
-    <div class="mc purple">
-      <div class="mc-label">F1 SCORE</div>
-      <div class="mc-val">0.74</div>
-      <div class="mc-sub">Harmonic mean</div>
-    </div>
+    <div class="mc blue"><div class="mc-label">AUC-ROC SCORE</div><div class="mc-val">0.77</div><div class="mc-sub">Prediction capability</div></div>
+    <div class="mc green"><div class="mc-label">ACCURACY</div><div class="mc-val">71%</div><div class="mc-sub">True classification rate</div></div>
+    <div class="mc teal"><div class="mc-label">PRECISION (LATE)</div><div class="mc-val">80%</div><div class="mc-sub">Reliability on positive class</div></div>
+    <div class="mc purple"><div class="mc-label">F1 SCORE</div><div class="mc-val">0.74</div><div class="mc-sub">Harmonic mean</div></div>
   </div>
-
   <div class="g2">
     <div class="cc">
       <div class="cc-title">SHAP Feature Importance</div>
       <div class="cc-sub">MEAN |SHAP| VALUE — IMPACT ON MODEL OUTPUT</div>
       <div style="margin-top:8px">
-        <div class="shap-row">
-          <div class="shap-lbl">shipping_risk_score</div>
-          <div class="shap-wrap"><div class="shap-fill" style="width:95%;background:var(--blue)"></div></div>
-          <div class="shap-pct" style="color:var(--blue)">45%</div>
-        </div>
-        <div class="shap-row">
-          <div class="shap-lbl">days_shipping_scheduled</div>
-          <div class="shap-wrap"><div class="shap-fill" style="width:68%;background:var(--teal)"></div></div>
-          <div class="shap-pct" style="color:var(--teal)">32%</div>
-        </div>
-        <div class="shap-row">
-          <div class="shap-lbl">customer_segment</div>
-          <div class="shap-wrap"><div class="shap-fill" style="width:32%;background:var(--purple)"></div></div>
-          <div class="shap-pct" style="color:var(--purple)">15%</div>
-        </div>
-        <div class="shap-row">
-          <div class="shap-lbl">order_region</div>
-          <div class="shap-wrap"><div class="shap-fill" style="width:11%;background:var(--amber)"></div></div>
-          <div class="shap-pct" style="color:var(--amber)">5%</div>
-        </div>
-        <div class="shap-row">
-          <div class="shap-lbl">department_encoded</div>
-          <div class="shap-wrap"><div class="shap-fill" style="width:6%;background:var(--pink)"></div></div>
-          <div class="shap-pct" style="color:var(--pink)">3%</div>
-        </div>
-        <div class="shap-row">
-          <div class="shap-lbl">item_quantity</div>
-          <div class="shap-wrap"><div class="shap-fill" style="width:4%;background:var(--muted)"></div></div>
-          <div class="shap-pct" style="color:var(--muted)">2%</div>
-        </div>
+        <div class="shap-row"><div class="shap-lbl">shipping_risk_score</div><div class="shap-wrap"><div class="shap-fill" style="width:95%;background:var(--blue)"></div></div><div class="shap-pct" style="color:var(--blue)">45%</div></div>
+        <div class="shap-row"><div class="shap-lbl">days_shipping_scheduled</div><div class="shap-wrap"><div class="shap-fill" style="width:68%;background:var(--teal)"></div></div><div class="shap-pct" style="color:var(--teal)">32%</div></div>
+        <div class="shap-row"><div class="shap-lbl">customer_segment</div><div class="shap-wrap"><div class="shap-fill" style="width:32%;background:var(--purple)"></div></div><div class="shap-pct" style="color:var(--purple)">15%</div></div>
+        <div class="shap-row"><div class="shap-lbl">order_region</div><div class="shap-wrap"><div class="shap-fill" style="width:11%;background:var(--amber)"></div></div><div class="shap-pct" style="color:var(--amber)">5%</div></div>
+        <div class="shap-row"><div class="shap-lbl">department_encoded</div><div class="shap-wrap"><div class="shap-fill" style="width:6%;background:var(--pink)"></div></div><div class="shap-pct" style="color:var(--pink)">3%</div></div>
       </div>
     </div>
-
     <div class="cc">
-      <div class="cc-title">Model Performance Breakdown</div>
-      <div class="cc-sub">CLASS-LEVEL METRICS FROM TEST SET (7,937 SAMPLES)</div>
-      <div style="position:relative;height:200px;margin-bottom:16px">
-        <canvas id="c-perf" role="img" aria-label="Model performance radar chart showing AUC, accuracy, precision, recall, F1">Model metrics radar.</canvas>
-      </div>
-      <div class="sec-title" style="margin-top:16px">MODEL NOTES</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div class="insight-tile">
-          <div class="it-title">Leakage Detected &amp; Fixed</div>
-          <div class="it-text">Initial AUC of 1.0 flagged as data leakage — <code style="font-family:var(--mono);font-size:10px">days_shipping_real</code> removed. Final AUC 0.77 is honest and production-valid.</div>
-        </div>
-        <div class="insight-tile">
-          <div class="it-title">Train/Test Split — Stratified</div>
-          <div class="it-text">80/20 stratified split. Train: 31,745 samples · Test: 7,937 samples. Late delivery rate preserved at 57.7% in both splits.</div>
-        </div>
+      <div class="cc-title">Model Performance Radar</div>
+      <div class="cc-sub">CLASS-LEVEL METRICS · TEST SET 7,937 SAMPLES</div>
+      <div style="position:relative;height:220px"><canvas id="c-perf"></canvas></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px">
+        <div class="insight-tile"><div class="it-title">Leakage Detected & Fixed</div><div class="it-text">Initial AUC of 1.0 flagged as data leakage — days_shipping_real removed. Final AUC 0.77 is production-valid and honest.</div></div>
+        <div class="insight-tile"><div class="it-title">Stratified 80/20 Split</div><div class="it-text">Train: 31,745 · Test: 7,937. Late delivery rate preserved at 57.7% in both sets ensuring unbiased evaluation.</div></div>
       </div>
     </div>
   </div>
-
   <div class="cc">
-    <div class="cc-title">Model Interpretation — What Drives Late Delivery?</div>
-    <div class="cc-sub">BUSINESS TRANSLATION OF SHAP FINDINGS</div>
+    <div class="cc-title">What Drives Late Delivery? — SHAP Business Translation</div>
+    <div class="cc-sub">ACTIONABLE INSIGHTS FOR NEXACO PROCUREMENT TEAM</div>
     <div class="g3">
-      <div class="insight-tile">
-        <div class="it-icon">🚢</div>
-        <div class="it-title">Shipping Mode = 45% of Prediction Power</div>
-        <div class="it-text">The single biggest predictor of late delivery is which shipping mode is chosen. Second Class = almost guaranteed delay. Standard Class = near-zero delay risk.</div>
-      </div>
-      <div class="insight-tile">
-        <div class="it-icon">📅</div>
-        <div class="it-title">Scheduled Window = 32% Influence</div>
-        <div class="it-text">Longer planned shipping windows correlate with higher late risk — suggesting systemic underestimation of fulfillment time in order processing.</div>
-      </div>
-      <div class="insight-tile">
-        <div class="it-icon">👤</div>
-        <div class="it-title">Customer Segment = 15% Influence</div>
-        <div class="it-text">Customer type (Consumer vs Corporate vs Home Office) drives 15% of delay prediction — suggesting differential treatment in fulfillment priority.</div>
-      </div>
+      <div class="insight-tile"><div class="it-icon">🚢</div><div class="it-title">Shipping Mode = 45% of Prediction</div><div class="it-text">Second Class = almost guaranteed delay. Switching NexaCo's high-value orders to Standard Class is the single highest-ROI intervention available.</div></div>
+      <div class="insight-tile"><div class="it-icon">📅</div><div class="it-title">Scheduled Window = 32% Influence</div><div class="it-text">Longer planned windows correlate with higher late risk — NexaCo's order processing underestimates fulfillment time systematically.</div></div>
+      <div class="insight-tile"><div class="it-icon">👤</div><div class="it-title">Customer Segment = 15% Influence</div><div class="it-text">Consumer vs Corporate vs Home Office segments receive differential fulfillment. NexaCo should standardize SLA enforcement across all segments.</div></div>
     </div>
   </div>
 </div>
 
-</div><!-- end content -->
-</div><!-- end main -->
+</div></div>
 
 <script>
-const supplierData = [
+const supplierData=[
   {dept:'Pet Shop',orders:136,lateRate:64.7,avgDelay:0.82,score:82.7,tier:'High Risk',color:'#ef4444'},
   {dept:'Book Shop',orders:102,lateRate:64.7,avgDelay:0.83,score:75.6,tier:'High Risk',color:'#ef4444'},
   {dept:'Technology',orders:450,lateRate:64.7,avgDelay:0.76,score:70.1,tier:'High Risk',color:'#ef4444'},
@@ -662,9 +516,13 @@ const supplierData = [
   {dept:'Fitness',orders:1443,lateRate:55.4,avgDelay:0.57,score:13.9,tier:'Low Risk',color:'#22c55e'},
   {dept:'Outdoors',orders:3529,lateRate:55.1,avgDelay:0.54,score:13.7,tier:'Low Risk',color:'#22c55e'},
 ];
+const deptDRI={pet_shop:82.7,book_shop:75.6,technology:70.1,fan_shop:59.7,health:40.8,discs_shop:39.7,apparel:34.7,golf:18.0,footwear:15.6,fitness:13.9,outdoors:13.7};
+const modeDelay={second_class:2.01,first_class:1.0,same_day:0.5,standard:0.0};
+const modeRiskScore={second_class:3,first_class:2,same_day:1,standard:0};
+const marketRisk={europe:0.63,usca:0.59,latam:0.60,pacific:0.61,africa:0.57};
+const pageTitles={overview:'EXECUTIVE OVERVIEW',simulator:'RISK SIMULATOR',supplier:'DISRUPTION RISK INDEX',delivery:'DELIVERY ANALYTICS',forecast:'DEMAND FORECAST',ml:'ML INSIGHTS'};
 
-const pageTitles={overview:'EXECUTIVE OVERVIEW',supplier:'DISRUPTION RISK INDEX',delivery:'DELIVERY ANALYTICS',forecast:'DEMAND FORECAST',ml:'ML INSIGHTS'};
-function show(id, btn) {
+function show(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -672,204 +530,106 @@ function show(id, btn) {
   document.getElementById('topbar-label').textContent=pageTitles[id];
 }
 
-function buildTable() {
-  const tbody = document.getElementById('risk-tbody');
-  supplierData.forEach(d => {
-    const barW = d.score + '%';
-    const badgeClass = d.tier === 'High Risk' ? 'red' : d.tier === 'Medium Risk' ? 'amber' : 'green';
-    tbody.innerHTML += `<tr>
-      <td><strong>${d.dept}</strong></td>
-      <td>${d.orders.toLocaleString()}</td>
-      <td>${d.lateRate.toFixed(1)}%</td>
-      <td>${d.avgDelay.toFixed(2)}d</td>
-      <td><span class="badge ${badgeClass}">${d.tier}</span></td>
-      <td>
-        <strong style="color:${d.color}">${d.score}</strong>
-        <div class="risk-bar-wrap"><div class="risk-bar" style="width:${barW};background:${d.color}"></div></div>
-      </td>
-    </tr>`;
+// Clock
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');},1000);
+document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-GB');
+
+// Live feed
+const depts=['Pet Shop','Book Shop','Technology','Fan Shop','Apparel','Discs Shop','Golf','Footwear','Fitness','Outdoors'];
+const modes=['Second Class','First Class','Same Day','Standard Class'];
+const statuses=['Late delivery','On time','Advance shipping','Shipping canceled'];
+const statusColors={'Late delivery':'#ef4444','On time':'#22c55e','Advance shipping':'#14b8a6','Shipping canceled':'#f5a623'};
+let orderCounter=56000;
+function riskColor(r){return r>66?'#ef4444':r>33?'#f5a623':'#22c55e'}
+
+function addLiveRow(){
+  const feed=document.getElementById('order-feed');
+  const dept=depts[Math.floor(Math.random()*depts.length)];
+  const mode=modes[Math.floor(Math.random()*modes.length)];
+  const stat=statuses[Math.floor(Math.random()*statuses.length)];
+  const risk=Math.floor(Math.random()*100);
+  orderCounter++;
+  const row=document.createElement('div');
+  row.className='order-row pulse';
+  row.innerHTML=`<div class="order-id">#${orderCounter}</div><div class="order-dept">${dept}</div><div class="order-mode">${mode}</div><div class="order-risk" style="color:${riskColor(risk)}">${risk}</div><div class="order-status"><span style="font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:20px;background:${statusColors[stat]}22;color:${statusColors[stat]};border:1px solid ${statusColors[stat]}44;white-space:nowrap;display:inline-block">${stat}</span></div>`;
+  feed.insertBefore(row,feed.firstChild);
+  if(feed.children.length>12)feed.removeChild(feed.lastChild);
+}
+for(let i=0;i<8;i++)setTimeout(addLiveRow,i*80);
+setInterval(addLiveRow,4000);
+
+// Predictor
+let simCount=0;
+function predictRisk(){
+  const dept=document.getElementById('inp-dept').value;
+  const mode=document.getElementById('inp-mode').value;
+  const days=parseInt(document.getElementById('inp-days').value);
+  const market=document.getElementById('inp-market').value;
+  const modeS=modeRiskScore[mode]/3;
+  const daysS=Math.min((days-1)/5,1);
+  const deptS=deptDRI[dept]/100;
+  const marketS=marketRisk[market];
+  const lateRisk=Math.min(Math.round((modeS*0.45+daysS*0.32+deptS*0.15+marketS*0.08)*100),97);
+  const dri=Math.round(deptDRI[dept]);
+  const delay=modeDelay[mode].toFixed(1)+'d';
+  let verdict,vc,cardClass,recTitle,recText;
+  if(lateRisk>=70){verdict='HIGH RISK';vc='#ef4444';cardClass='danger';recTitle='⚠️ Procurement Alert — Action Required';recText=`This shipment has a ${lateRisk}% probability of late delivery. Switch to Standard Class to reduce delay risk by ~85%. If Second Class is required, add 2-day buffer to customer SLA. Escalate to procurement manager before dispatch.`;}
+  else if(lateRisk>=40){verdict='MEDIUM RISK';vc='#f5a623';cardClass='warning';recTitle='⚡ Moderate Risk — Monitor Closely';recText=`${lateRisk}% late delivery probability. Consider upgrading to First Class or Same Day for time-sensitive orders. Department DRI of ${dri} indicates historical delivery challenges.`;}
+  else{verdict='LOW RISK';vc='#22c55e';cardClass='safe';recTitle='✅ Approved for Dispatch';recText=`${lateRisk}% late delivery probability — within acceptable NexaCo thresholds. Standard Class with ${days}-day schedule is well-matched for this department's historical performance. Proceed with dispatch.`;}
+  const panel=document.getElementById('result-panel');
+  panel.className='result-panel show';
+  document.getElementById('res-late-val').textContent=lateRisk+'%';
+  document.getElementById('res-late-val').style.color=vc;
+  document.getElementById('res-late-card').className='result-card '+cardClass;
+  document.getElementById('res-dri').textContent=dri;
+  document.getElementById('res-verdict').textContent=verdict;
+  document.getElementById('res-verdict').style.color=vc;
+  document.getElementById('res-verdict-card').className='result-card '+cardClass;
+  document.getElementById('res-delay').textContent=delay;
+  document.getElementById('res-delay-card').className='result-card '+(modeDelay[mode]>1?'danger':modeDelay[mode]>0?'warning':'safe');
+  document.getElementById('res-rec').style.display='block';
+  document.getElementById('rec-title').textContent=recTitle;
+  document.getElementById('rec-text').textContent=recText;
+}
+
+function addToSimFeed(){
+  const deptEl=document.getElementById('inp-dept');
+  const modeEl=document.getElementById('inp-mode');
+  const feed=document.getElementById('sim-feed');
+  simCount++;
+  if(simCount===1)feed.innerHTML='';
+  const deptName=deptEl.options[deptEl.selectedIndex].text;
+  const modeName=modeEl.options[modeEl.selectedIndex].text;
+  const risk=Math.round((modeRiskScore[modeEl.value]/3*0.45+deptDRI[deptEl.value]/100*0.55)*100);
+  const c=riskColor(risk);
+  const row=document.createElement('div');
+  row.className='order-row pulse';
+  row.innerHTML=`<div class="order-id">#SIM-${simCount.toString().padStart(3,'0')}</div><div class="order-dept">${deptName}</div><div class="order-mode">${modeName}</div><div class="order-risk" style="color:${c}">${risk}</div><div class="order-status"><span style="font-family:var(--mono);font-size:10px;padding:3px 10px;border-radius:20px;background:${c}22;color:${c};border:1px solid ${c}44;white-space:nowrap;display:inline-block">Simulated</span></div>`;
+  feed.insertBefore(row,feed.firstChild);
+}
+
+// Table
+function buildTable(){
+  const tbody=document.getElementById('risk-tbody');
+  supplierData.forEach(d=>{
+    const bc=d.tier==='High Risk'?'red':d.tier==='Medium Risk'?'amber':'green';
+    tbody.innerHTML+=`<tr><td><strong>${d.dept}</strong></td><td>${d.orders.toLocaleString()}</td><td>${d.lateRate.toFixed(1)}%</td><td>${d.avgDelay.toFixed(2)}d</td><td><span class="badge ${bc}">${d.tier}</span></td><td><strong style="color:${d.color}">${d.score}</strong><div class="risk-bar-wrap"><div class="risk-bar" style="width:${d.score}%;background:${d.color}"></div></div></td></tr>`;
   });
 }
 
-window.onload = function() {
+window.onload=function(){
   buildTable();
-
-  // Donut
-  new Chart(document.getElementById('c-donut'), {
-    type:'doughnut',
-    data:{
-      labels:['Late delivery','Advance shipping','Shipping on time','Canceled'],
-      datasets:[{data:[22915,8753,6973,1041],backgroundColor:['#ef4444','#14b8a6','#4f8ef7','#8892a4'],borderWidth:0,hoverOffset:4}]
-    },
-    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.label+': '+c.parsed.toLocaleString()}}}}}
-  });
-
-  // DRI Bar
-  new Chart(document.getElementById('c-dri'), {
-    type:'bar',
-    data:{
-      labels:supplierData.map(d=>d.dept),
-      datasets:[{
-        label:'DRI Score',
-        data:supplierData.map(d=>d.score),
-        backgroundColor:supplierData.map(d=>d.color),
-        borderRadius:4,borderSkipped:false
-      }]
-    },
-    options:{
-      indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},max:100},y:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:11}}}}
-    }
-  });
-
-  // Scatter
-  const scatterDatasets = [
-    {label:'High Risk',data:[{x:0.647,y:0.82,r:6},{x:0.647,y:0.83,r:5},{x:0.647,y:0.76,r:9}],backgroundColor:'rgba(239,68,68,0.7)',borderColor:'#ef4444'},
-    {label:'Medium Risk',data:[{x:0.620,y:0.72,r:18},{x:0.583,y:0.47,r:4},{x:0.603,y:0.63,r:10},{x:0.584,y:0.63,r:22}],backgroundColor:'rgba(245,166,35,0.7)',borderColor:'#f5a623'},
-    {label:'Low Risk',data:[{x:0.562,y:0.56,r:20},{x:0.556,y:0.54,r:14},{x:0.554,y:0.57,r:8},{x:0.551,y:0.54,r:12}],backgroundColor:'rgba(34,197,94,0.7)',borderColor:'#22c55e'},
-  ];
-  new Chart(document.getElementById('c-scatter'), {
-    type:'bubble',
-    data:{datasets:scatterDatasets},
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{title:{display:true,text:'Late Rate',color:'#8892a4'},grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(2)},min:0.53,max:0.68},
-        y:{title:{display:true,text:'Avg Delay (days)',color:'#8892a4'},grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},min:0.3,max:1.0}
-      }
-    }
-  });
-
-  // Shipping Mode
-  new Chart(document.getElementById('c-mode'), {
-    type:'bar',
-    data:{
-      labels:['Second Class','First Class','Same Day','Standard Class'],
-      datasets:[{
-        label:'Avg Delay (days)',
-        data:[2.01,1.0,0.5,0.0],
-        backgroundColor:['#ef4444','#f5a623','#14b8a6','#22c55e'],
-        borderRadius:6
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{color:'#eef2ff'}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v+'d'}}}
-    }
-  });
-
-  // Region
-  new Chart(document.getElementById('c-region'), {
-    type:'bar',
-    data:{
-      labels:['Central Asia','South of USA','North Africa','South Asia','East Africa','Central Africa','N. Europe','W. Europe'],
-      datasets:[{
-        label:'Avg Delay',
-        data:[0.895,0.729,0.687,0.684,0.673,0.663,0.658,0.639],
-        backgroundColor:'rgba(79,142,247,0.8)',
-        borderRadius:4
-      }]
-    },
-    options:{
-      indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(2)+'d'},min:0.5},y:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:11}}}}
-    }
-  });
-
-  // Dept Delay
-  new Chart(document.getElementById('c-dept'), {
-    type:'bar',
-    data:{
-      labels:['Book Shop','Pet Shop','Technology','Fan Shop','Apparel','Discs Shop','Fitness','Golf','Footwear','Outdoors','Health & Beauty'],
-      datasets:[{
-        label:'Avg Delay',
-        data:[0.833,0.816,0.764,0.717,0.628,0.627,0.571,0.563,0.542,0.540,0.472],
-        backgroundColor:['#ef4444','#ef4444','#ef4444','#f5a623','#f5a623','#f5a623','#22c55e','#22c55e','#22c55e','#22c55e','#22c55e'],
-        borderRadius:4
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:10},maxRotation:30}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(1)+'d'}}}
-    }
-  });
-
-  // Forecast
-  const days=[];const actual=[];const upper=[];const lower=[];
-  for(let i=0;i<120;i++){
-    const d=new Date(2017,9,i);
-    days.push(d.toISOString().slice(0,10));
-    const base=20+Math.sin(i*0.45)*2+Math.sin(i*0.1)*1.5;
-    const noise=(Math.random()-0.5)*4;
-    actual.push(i<90?+(base+noise).toFixed(1):null);
-    upper.push(+(base+3+(i>89?i-89:0)*0.1).toFixed(1));
-    lower.push(+(base-3-(i>89?i-89:0)*0.1).toFixed(1));
-  }
-  new Chart(document.getElementById('c-forecast'), {
-    type:'line',
-    data:{
-      labels:days,
-      datasets:[
-        {label:'Upper',data:upper,borderColor:'transparent',backgroundColor:'rgba(79,142,247,0.15)',fill:'+1',pointRadius:0,tension:0.4},
-        {label:'Forecast',data:actual.map((v,i)=>v??upper[i]),borderColor:'#4f8ef7',backgroundColor:'transparent',pointRadius:0,tension:0.4,borderWidth:2},
-        {label:'Lower',data:lower,borderColor:'transparent',backgroundColor:'rgba(79,142,247,0.15)',fill:false,pointRadius:0,tension:0.4},
-      ]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',maxTicksLimit:8}},
-        y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},min:8,max:36}
-      }
-    }
-  });
-
-  // Weekly
-  new Chart(document.getElementById('c-weekly'), {
-    type:'bar',
-    data:{
-      labels:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
-      datasets:[{
-        label:'Relative Demand',
-        data:[18,17,15,19,24,23,20],
-        backgroundColor:['#4f8ef7','#4f8ef7','#8892a4','#4f8ef7','#22c55e','#22c55e','#4f8ef7'],
-        borderRadius:4
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{grid:{display:false},ticks:{color:'#eef2ff'}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'}}}
-    }
-  });
-
-  // Radar
-  new Chart(document.getElementById('c-perf'), {
-    type:'radar',
-    data:{
-      labels:['AUC-ROC','Accuracy','Precision\n(Late)','Recall\n(Late)','F1 Score'],
-      datasets:[{
-        label:'XGBoost',
-        data:[77,71,80,66,74],
-        borderColor:'#4f8ef7',
-        backgroundColor:'rgba(79,142,247,0.15)',
-        pointBackgroundColor:'#4f8ef7',
-        borderWidth:2,
-        pointRadius:4
-      }]
-    },
-    options:{
-      responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{r:{grid:{color:'#1e2a3a'},ticks:{display:false,backdropColor:'transparent'},pointLabels:{color:'#8892a4',font:{size:10}},angleLines:{color:'#1e2a3a'},min:50,max:100}}
-    }
-  });
+  new Chart(document.getElementById('c-donut'),{type:'doughnut',data:{labels:['Late delivery','Advance shipping','On time','Canceled'],datasets:[{data:[22915,8753,6973,1041],backgroundColor:['#ef4444','#14b8a6','#4f8ef7','#8892a4'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}});
+  new Chart(document.getElementById('c-dri'),{type:'bar',data:{labels:supplierData.map(d=>d.dept),datasets:[{data:supplierData.map(d=>d.score),backgroundColor:supplierData.map(d=>d.color),borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},max:100},y:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:11}}}}}});
+  new Chart(document.getElementById('c-scatter'),{type:'bubble',data:{datasets:[{label:'High Risk',data:[{x:0.647,y:0.82,r:6},{x:0.647,y:0.83,r:5},{x:0.647,y:0.76,r:9}],backgroundColor:'rgba(239,68,68,0.7)',borderColor:'#ef4444'},{label:'Medium Risk',data:[{x:0.620,y:0.72,r:18},{x:0.583,y:0.47,r:4},{x:0.603,y:0.63,r:10},{x:0.584,y:0.63,r:22}],backgroundColor:'rgba(245,166,35,0.7)',borderColor:'#f5a623'},{label:'Low Risk',data:[{x:0.562,y:0.56,r:20},{x:0.556,y:0.54,r:14},{x:0.554,y:0.57,r:8},{x:0.551,y:0.54,r:12}],backgroundColor:'rgba(34,197,94,0.7)',borderColor:'#22c55e'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'Late Rate',color:'#8892a4'},grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(2)},min:0.53,max:0.68},y:{title:{display:true,text:'Avg Delay',color:'#8892a4'},grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},min:0.3,max:1.0}}}});
+  new Chart(document.getElementById('c-mode'),{type:'bar',data:{labels:['Second Class','First Class','Same Day','Standard Class'],datasets:[{data:[2.01,1.0,0.5,0.0],backgroundColor:['#ef4444','#f5a623','#14b8a6','#22c55e'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#eef2ff'}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v+'d'}}}}});
+  new Chart(document.getElementById('c-region'),{type:'bar',data:{labels:['Central Asia','South of USA','North Africa','South Asia','East Africa','Central Africa','N. Europe','W. Europe'],datasets:[{data:[0.895,0.729,0.687,0.684,0.673,0.663,0.658,0.639],backgroundColor:'rgba(79,142,247,0.8)',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(2)+'d'},min:0.5},y:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:11}}}}}});
+  new Chart(document.getElementById('c-dept'),{type:'bar',data:{labels:['Book Shop','Pet Shop','Technology','Fan Shop','Apparel','Discs Shop','Fitness','Golf','Footwear','Outdoors','Health & Beauty'],datasets:[{data:[0.833,0.816,0.764,0.717,0.628,0.627,0.571,0.563,0.542,0.540,0.472],backgroundColor:['#ef4444','#ef4444','#ef4444','#f5a623','#f5a623','#f5a623','#22c55e','#22c55e','#22c55e','#22c55e','#22c55e'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#eef2ff',font:{size:10},maxRotation:30}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',callback:v=>v.toFixed(1)+'d'}}}}});
+  const days=[],upper=[],lower=[],actual=[];
+  for(let i=0;i<120;i++){const d=new Date(2017,9,i);days.push(d.toISOString().slice(0,10));const base=20+Math.sin(i*0.45)*2+Math.sin(i*0.1)*1.5;const noise=(Math.random()-0.5)*4;actual.push(i<90?+(base+noise).toFixed(1):null);upper.push(+(base+3+(i>89?i-89:0)*0.1).toFixed(1));lower.push(+(base-3-(i>89?i-89:0)*0.1).toFixed(1));}
+  new Chart(document.getElementById('c-forecast'),{type:'line',data:{labels:days,datasets:[{data:upper,borderColor:'transparent',backgroundColor:'rgba(79,142,247,0.15)',fill:'+1',pointRadius:0,tension:0.4},{data:actual.map((v,i)=>v??upper[i]),borderColor:'#4f8ef7',backgroundColor:'transparent',pointRadius:0,tension:0.4,borderWidth:2},{data:lower,borderColor:'transparent',backgroundColor:'rgba(79,142,247,0.15)',fill:false,pointRadius:0,tension:0.4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4',maxTicksLimit:8}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'},min:8,max:36}}}});
+  new Chart(document.getElementById('c-weekly'),{type:'bar',data:{labels:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],datasets:[{data:[18,17,15,19,24,23,20],backgroundColor:['#4f8ef7','#4f8ef7','#8892a4','#4f8ef7','#22c55e','#22c55e','#4f8ef7'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#eef2ff'}},y:{grid:{color:'#1e2a3a'},ticks:{color:'#8892a4'}}}}});
+  new Chart(document.getElementById('c-perf'),{type:'radar',data:{labels:['AUC-ROC','Accuracy','Precision (Late)','Recall (Late)','F1 Score'],datasets:[{data:[77,71,80,66,74],borderColor:'#4f8ef7',backgroundColor:'rgba(79,142,247,0.15)',pointBackgroundColor:'#4f8ef7',borderWidth:2,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{grid:{color:'#1e2a3a'},ticks:{display:false,backdropColor:'transparent'},pointLabels:{color:'#8892a4',font:{size:10}},angleLines:{color:'#1e2a3a'},min:50,max:100}}}});
 };
 </script>
 </body>
